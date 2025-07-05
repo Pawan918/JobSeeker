@@ -111,7 +111,7 @@ const jobTypeOptions = [
 ]
 
 const submitJob = async () => {
-    if (!isAuthenticated()) {
+    if (!isAuthenticated.value) {
         toast.info('Please login to post job')
         return router.push('/login')
     }

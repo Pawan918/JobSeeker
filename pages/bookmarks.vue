@@ -41,7 +41,7 @@ import type { Job } from '~/types/index'
 const { token, isAuthenticated } = useAuth()
 
 const { data: bookmarks, error } = await useAsyncData<Job[]>('bookmarks', async () => {
-  if (!isAuthenticated()) return []
+  if (!isAuthenticated.value) return []
   const res = await useApi<Job[]>('/bookmarks', {
     headers: { Authorization: `Bearer ${token.value}` },
   })

@@ -5,25 +5,31 @@ export const useAuth = () => {
   const setAuth = (newToken: string, userData: any) => {
     token.value = newToken
     user.value = userData
-    localStorage.setItem('user', JSON.stringify(userData))
   }
 
   const clearAuth = () => {
     token.value = null
     user.value = null
-    localStorage.removeItem('user')
   }
 
-  const initAuth = () => {
-    const savedUser = localStorage.getItem('user')
-    if (savedUser) {
-      user.value = JSON.parse(savedUser)
+  const initAuth = async () => {
+    if (!token.value || user.value) return
+    try {
+      const { data: fetchedUser } = await useAsyncData('user', async () => {
+        return await useApi<{ user: any }>('/me', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        })
+      })
+      user.value = fetchedUser.value?.user
+    } catch (err) {
+      clearAuth()
     }
   }
 
-  const isAuthenticated = () => {
-    return !!token.value && !!user.value
-  }
+  const isAuthenticated = computed(() => !!token.value && !!user.value)
 
-  return { token, user, setAuth, clearAuth, initAuth, isAuthenticated  }
+  return { token, user, setAuth, clearAuth, initAuth, isAuthenticated }
 }

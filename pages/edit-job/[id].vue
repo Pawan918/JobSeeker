@@ -92,7 +92,7 @@ const fetchJob = async () => {
 }
 
 const updateJob = async () => {
-  if (!isAuthenticated()) {
+  if (!isAuthenticated.value) {
     toast.info('Please log in update jobs')
     return router.push('/login')
   }

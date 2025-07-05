@@ -113,7 +113,7 @@ const copyLink = () => {
 
 
 const applyToJob = async () => {
-  if (!isAuthenticated()) {
+  if (!isAuthenticated.value) {
     toast.info('Please login to apply job')
     return router.push('/login')
   }

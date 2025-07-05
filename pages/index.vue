@@ -161,7 +161,6 @@ watch(
 )
 
 const fetchBookmarks = async () => {
-    if (!isAuthenticated()) return
     const data = await useApi<{ id: number }[]>('/bookmarks', {
         headers: { Authorization: `Bearer ${token.value}` },
     })
@@ -169,7 +168,6 @@ const fetchBookmarks = async () => {
 }
 
 const fetchAppliedJobs = async () => {
-    if (!isAuthenticated()) return
     const apps = await useApi<{ jobId: number }[]>('/my-applications', {
         headers: { Authorization: `Bearer ${token.value}` },
     })
@@ -177,15 +175,17 @@ const fetchAppliedJobs = async () => {
 }
 
 onMounted(() => {
-    fetchBookmarks()
-    fetchAppliedJobs()
+    if (isAuthenticated.value) {
+        fetchBookmarks()
+        fetchAppliedJobs()
+    }
 })
 
 const resetFilters = () => Object.assign(filters, { search: '', type: '', location: '' })
 
 const toggleBookmark = async (jobId: number) => {
     try {
-        if (!isAuthenticated()) return toast.info('ℹ️ Please log in to bookmark jobs.')
+        if (!isAuthenticated) return toast.info('ℹ️ Please log in to bookmark jobs.')
         const isBookmarked = bookmarkedJobs.value.includes(jobId)
         await useApi<Bookmark>(`/bookmarks/${jobId}`, {
             method: isBookmarked ? 'DELETE' : 'POST',

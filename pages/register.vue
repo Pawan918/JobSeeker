@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+    <div class="h-full bg-gray-100 flex items-center justify-center px-4">
       <div class="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
         <h2 class="text-3xl font-bold text-gray-900 text-center mb-6">Create Account</h2>
         <form @submit.prevent="handleRegister" class="space-y-4">
