@@ -1,39 +1,36 @@
 <template>
   <div class="max-w-7xl mx-auto px-6 py-12">
     <div class="flex items-center justify-between mb-10">
-      <h1 class="text-4xl font-bold text-gray-900">🗂 My Posted Jobs</h1>
+      <h1 class="text-4xl font-bold text-gray-900 flex items-center gap-3">
+        <FolderIcon class="w-10 h-10" /> My Posted Jobs
+      </h1>
       <BaseButton variant="danger" size="md" :disabled="!jobs?.length" @click="confirmDeleteAll" class="gap-2">
         <TrashIcon class="w-5 h-5" />
         Delete All Jobs
       </BaseButton>
     </div>
 
-    <div v-if="jobs && jobs.length" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    <div v-if="jobs && jobs.length" class="grid gap-8 sm: grid-cols-2 lg:grid-cols-3">
       <div v-for="job in jobs" :key="job.id"
         class="relative group bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
         <div class="p-6 flex flex-col h-full">
-          <!-- Options Button -->
           <div class="absolute top-4 right-4 z-20">
-            <div class="relative">
-              <button @click="togglePopover(job.id)" class="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200">
-                <EllipsisHorizontalIcon class="w-5 h-5 text-gray-500" />
-              </button>
-
-              <div v-if="openPopoverId === job.id"
-                class="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg border border-gray-100 z-30">
-                <button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50" @click="editJob(job.id)">
-                  <PencilIcon class="w-5 h-5" />
+            <BasePopover >
+              <template #content>
+                <button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                  @click="editJob(job.id)">
+                  <PencilIcon class="w-4 h-4" />
                   Edit
                 </button>
-                <button class="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                <button class="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
                   @click="deleteJob(job.id)">
-                  🗑 Delete
+                  <TrashIcon class="w-4 h-4" />
+                  Delete
                 </button>
-              </div>
-            </div>
+              </template>
+            </BasePopover>
           </div>
 
-          <!-- Job Content -->
           <h2 class="text-lg font-semibold text-blue-700 group-hover:underline">
             {{ job.title }}
           </h2>
@@ -44,7 +41,6 @@
             {{ job.description }}
           </p>
 
-          <!-- Tags -->
           <div class="mt-4 flex flex-wrap gap-2">
             <span v-for="tag in job.tags" :key="tag"
               class="bg-gray-100 text-gray-700 px-2 py-0.5 text-xs rounded-full font-medium">
@@ -52,7 +48,6 @@
             </span>
           </div>
 
-          <!-- Type -->
           <div class="mt-auto pt-4 text-right">
             <span
               class="inline-block text-xs font-semibold px-2 py-1 bg-blue-50 text-blue-700 rounded-full border border-blue-100">
@@ -72,7 +67,9 @@
 <script setup lang="ts">
 import type { Job } from '~/types/index'
 import BaseButton from '~/components/BaseButton.vue'
-import { PencilIcon, TrashIcon } from '@heroicons/vue/24/solid'
+import BasePopover from '~/components/BasePopover.vue'
+import { PencilIcon, TrashIcon, EllipsisHorizontalIcon, FolderIcon } from '@heroicons/vue/24/outline'
+const toast = useNotification();
 const { token } = useAuth()
 const router = useRouter()
 const openPopoverId = ref<number | null>(null)
@@ -87,8 +84,6 @@ const { data: jobs } = await useAsyncData<Job[]>('my-jobs', async () => {
 })
 
 const deleteJob = async (id: number) => {
-  if (!confirm('Are you sure you want to delete this job?')) return
-
   try {
     await useApi(`/jobs/${id}`, {
       method: 'DELETE',
@@ -97,15 +92,14 @@ const deleteJob = async (id: number) => {
       },
     })
     jobs.value = jobs.value?.filter(job => job.id !== id) || []
-    openPopoverId.value = null
+    openPopoverId.value = null;
+    toast.success('Successfully deleted job.')
   } catch (err: any) {
-    alert(err?.data?.error || 'Failed to delete job')
+    toast.error('Network Error');
   }
 }
 
 const confirmDeleteAll = async () => {
-  if (!confirm('⚠️ Are you sure you want to delete ALL your posted jobs?')) return
-
   try {
     await useApi(`/my-jobs/delete-all`, {
       method: 'DELETE',
@@ -114,18 +108,15 @@ const confirmDeleteAll = async () => {
       },
     })
     jobs.value = []
+    toast.success('Successfully deleted all jobs.')
   } catch (err: any) {
-    alert(err?.data?.error || 'Failed to delete all jobs')
+    toast.error('Network Error');
   }
 }
 
 const editJob = (id: number) => {
   router.push(`/edit-job/${id}`)
   openPopoverId.value = null
-}
-
-const togglePopover = (id: number) => {
-  openPopoverId.value = openPopoverId.value === id ? null : id
 }
 </script>
 

@@ -76,8 +76,9 @@ import BaseButton from '~/components/BaseButton.vue'
 import FormField from '~/components/FormField.vue'
 import { z } from 'zod'
 
-const { user, token } = useAuth()
+const { user, token, isAuthenticated } = useAuth()
 const router = useRouter()
+const toast = useNotification()
 
 const form = ref({
     title: '',
@@ -110,8 +111,8 @@ const jobTypeOptions = [
 ]
 
 const submitJob = async () => {
-    if (!user.value || !token.value) {
-        alert('🔒 Please login first.')
+    if (!isAuthenticated()) {
+        toast.info('Please login to post job')
         return router.push('/login')
     }
 
@@ -152,8 +153,7 @@ const submitJob = async () => {
             description: '',
         })
     } catch (error: any) {
-        console.error('Post error:', error)
-        alert(error?.data?.error || '❌ Failed to post job')
+        toast.error('Network error')
     } finally {
         loading.value = false
     }

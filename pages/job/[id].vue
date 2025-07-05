@@ -90,12 +90,13 @@ import type { Job, Application } from '~/types/index'
 
 const route = useRoute()
 const router = useRouter()
+const toast = useNotification()
 const jobId = Number(route.params.id)
 
 const bookmarked = ref(false)
 const applied = ref(false)
 
-const { token } = useAuth()
+const { token, isAuthenticated } = useAuth()
 
 const { data: job, error } = await useAsyncData<Job>(
   `job-${jobId}`,
@@ -105,14 +106,17 @@ const { data: job, error } = await useAsyncData<Job>(
 const copyLink = () => {
   if (process.client) {
     navigator.clipboard.writeText(window.location.href).then(() => {
-      alert('🔗 Job link copied to clipboard')
+      toast.success('Link copied')
     })
   }
 }
 
 
 const applyToJob = async () => {
-  if (!token.value) return router.push('/login')
+  if (!isAuthenticated()) {
+    toast.info('Please login to apply job')
+    return router.push('/login')
+  }
   if (!job.value) return
 
   try {
@@ -121,9 +125,9 @@ const applyToJob = async () => {
       headers: { Authorization: `Bearer ${token.value}` }
     })
     applied.value = true
-    alert('🎉 Successfully applied for this job!')
+    toast.success('🎉 Successfully applied for this job!')
   } catch (err: any) {
-    alert(err?.data?.error || '❌ Failed to apply')
+    toast.error('Network error')
   }
 }
 
@@ -149,8 +153,9 @@ const toggleBookmark = async () => {
       headers: { Authorization: `Bearer ${token.value}` }
     })
     bookmarked.value = !bookmarked.value
+    toast.success('bookmarked successfully')
   } catch (err: any) {
-    alert(err?.data?.error || 'Bookmark failed')
+    toast.error('Network error')
   }
 }
 

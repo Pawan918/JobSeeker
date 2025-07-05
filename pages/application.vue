@@ -1,6 +1,8 @@
 <template>
   <div class="max-w-6xl mx-auto px-6 py-12">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">📄 My Job Applications</h1>
+    <h1 class="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+      <NewspaperIcon class="w-10 h-10" /> My Job Applications
+    </h1>
 
     <div v-if="applications.length" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <div v-for="app in applications" :key="app.id"
@@ -33,8 +35,9 @@
 </template>
 
 <script setup lang="ts">
+import { NewspaperIcon } from '@heroicons/vue/24/solid'
 import type { Application } from '~/types/index'
-const { token } = useAuth()
+const { token, isAuthenticated } = useAuth()
 
 const applications: Ref<Application[]> = ref([])
 
@@ -48,7 +51,7 @@ const formatDate = (dateStr: string) => {
 }
 
 const { data, error } = await useAsyncData('my-applications', async () => {
-  if (!token.value) return []
+  if (!isAuthenticated()) return []
   const res = await useApi<Application[]>('/my-applications', {
     headers: {
       Authorization: `Bearer ${token.value}`,

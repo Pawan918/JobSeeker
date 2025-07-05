@@ -1,7 +1,9 @@
 <template>
   <div class="max-w-4xl mx-auto px-6 py-12">
     <div class="bg-white shadow-md border border-gray-200 rounded-2xl p-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-8">✏️ Edit Job</h1>
+      <h1 class="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+        <PencilSquareIcon class="w-10 h-10" /> Edit Job
+      </h1>
 
       <form @submit.prevent="updateJob" class="grid gap-6 grid-cols-1 sm:grid-cols-2">
         <FormField label="Job Title">
@@ -35,7 +37,10 @@
         <div class="sm:col-span-2 flex justify-end pt-2">
           <button type="submit" :disabled="loading"
             class="bg-blue-600 hover:bg-blue-700 transition text-white font-medium px-6 py-2 rounded-lg disabled:opacity-50">
-            {{ loading ? 'Updating...' : '💾 Update Job' }}
+            <span v-if="loading">Updating...</span>
+            <span v-else class="flex items-center gap-2">
+              <RocketLaunchIcon class="w-4 h-4"/> Update Job
+            </span>
           </button>
         </div>
       </form>
@@ -46,10 +51,12 @@
 </template>
 
 <script setup lang="ts">
+import { RocketLaunchIcon, PencilSquareIcon } from '@heroicons/vue/24/solid'
 import { useRoute, useRouter } from 'vue-router'
 import FormField from '~/components/FormField.vue'
-const { token } = useAuth()
 
+const toast = useNotification()
+const { token, isAuthenticated } = useAuth()
 const route = useRoute()
 const router = useRouter()
 
@@ -80,14 +87,13 @@ const fetchJob = async () => {
       description: data.description,
     }
   } catch (error: any) {
-    console.error('Fetch error:', error)
-    alert('❌ Failed to fetch job')
+    toast.error('Network Error');
   }
 }
 
 const updateJob = async () => {
-  if (!token.value) {
-    alert('🔒 Please login to edit this job.')
+  if (!isAuthenticated()) {
+    toast.info('Please log in update jobs')
     return router.push('/login')
   }
 
@@ -110,10 +116,10 @@ const updateJob = async () => {
     })
 
     successMessage.value = '✅ Job updated successfully!'
+    toast.success('Job updated successfully')
     setTimeout(() => router.push('/my-jobs'), 1500)
   } catch (err: any) {
-    console.error('Update error:', err)
-    alert(err?.data?.error || '❌ Failed to update job')
+    toast.error('Network Error');
   } finally {
     loading.value = false
   }

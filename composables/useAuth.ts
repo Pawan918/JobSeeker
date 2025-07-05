@@ -21,5 +21,9 @@ export const useAuth = () => {
     }
   }
 
-  return { token, user, setAuth, clearAuth, initAuth }
+  const isAuthenticated = () => {
+    return !!token.value && !!user.value
+  }
+
+  return { token, user, setAuth, clearAuth, initAuth, isAuthenticated  }
 }

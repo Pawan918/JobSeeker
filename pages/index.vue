@@ -118,7 +118,7 @@ import BasePagination from '@/components/BasePagination.vue'
 import type { Bookmark, Job } from '~/types/index'
 import { useThrottle } from '~/composables/useThrottle'
 
-const { token } = useAuth()
+const { token, isAuthenticated } = useAuth()
 const toast = useNotification();
 const limit = 6
 const currentPage = ref(1)
@@ -161,7 +161,7 @@ watch(
 )
 
 const fetchBookmarks = async () => {
-    if (!token.value) return
+    if (!isAuthenticated()) return
     const data = await useApi<{ id: number }[]>('/bookmarks', {
         headers: { Authorization: `Bearer ${token.value}` },
     })
@@ -169,7 +169,7 @@ const fetchBookmarks = async () => {
 }
 
 const fetchAppliedJobs = async () => {
-    if (!token.value) return
+    if (!isAuthenticated()) return
     const apps = await useApi<{ jobId: number }[]>('/my-applications', {
         headers: { Authorization: `Bearer ${token.value}` },
     })
@@ -184,15 +184,19 @@ onMounted(() => {
 const resetFilters = () => Object.assign(filters, { search: '', type: '', location: '' })
 
 const toggleBookmark = async (jobId: number) => {
-    if (!token.value) return  toast.info('ℹ️ Please log in to bookmark jobs.')
-    const isBookmarked = bookmarkedJobs.value.includes(jobId)
-    await useApi<Bookmark>(`/bookmarks/${jobId}`, {
-        method: isBookmarked ? 'DELETE' : 'POST',
-        headers: { Authorization: `Bearer ${token.value}` },
-    })
-    isBookmarked
-        ? (bookmarkedJobs.value = bookmarkedJobs.value.filter((id: number) => id !== jobId))
-        : bookmarkedJobs.value.push(jobId)
+    try {
+        if (!isAuthenticated()) return toast.info('ℹ️ Please log in to bookmark jobs.')
+        const isBookmarked = bookmarkedJobs.value.includes(jobId)
+        await useApi<Bookmark>(`/bookmarks/${jobId}`, {
+            method: isBookmarked ? 'DELETE' : 'POST',
+            headers: { Authorization: `Bearer ${token.value}` },
+        })
+        isBookmarked
+            ? (bookmarkedJobs.value = bookmarkedJobs.value.filter((id: number) => id !== jobId))
+            : bookmarkedJobs.value.push(jobId)
+    } catch (err) {
+        toast.error('Network error')
+    }
 }
 const jobs = computed(() => jobData.value?.jobs ?? [])
 const totalJobs = computed(() => jobData.value?.total ?? 0)

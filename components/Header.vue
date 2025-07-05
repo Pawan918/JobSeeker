@@ -6,14 +6,26 @@
           DevJobsHub
         </NuxtLink>
         <nav class="hidden md:flex items-center space-x-6 text-sm text-gray-700 font-medium">
-          <NuxtLink activeClass="text-blue-600" :to="nav.to" class="hover:text-blue-600 transition" v-for="(nav) in navigationRoutes" :key="nav.name">
+          <NuxtLink activeClass="text-blue-600" :to="nav.to" class="hover:text-blue-600 transition"
+            v-for="(nav) in navigationRoutes" :key="nav.name">
             {{ nav.name }}
           </NuxtLink>
         </nav>
         <div class="flex items-center space-x-4 text-sm">
           <template v-if="user">
-            <span class="hidden sm:inline text-gray-600">Hi, {{ user.name }}</span>
-            <button @click="logout" class="text-red-600 hover:underline transition">Logout</button>
+            <BasePopover>
+              <template #trigger>
+                <BaseAvatar :name="user.name">
+                </BaseAvatar>
+              </template>
+              <template #content>
+                <button class="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                  @click="logout">
+                  <ArrowLeftStartOnRectangleIcon class="w-4 h-4" />
+                  Log out
+                </button>
+              </template>
+            </BasePopover>
           </template>
 
           <template v-else>
@@ -29,6 +41,8 @@
 </template>
 
 <script setup lang="ts">
+import { ArrowLeftStartOnRectangleIcon } from '@heroicons/vue/24/solid'
+
 const { user, clearAuth } = useAuth()
 
 const navigationRoutes = [

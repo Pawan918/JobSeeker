@@ -1,6 +1,8 @@
 <template>
   <div class="max-w-7xl mx-auto px-6 py-12">
-    <h1 class="text-3xl font-bold mb-8 text-gray-900">❤️ Your Bookmarked Jobs</h1>
+    <h1 class="text-3xl font-bold mb-8 text-gray-900 flex items-center gap-3">
+      <BookmarkIcon class="w-10 h-10 text-red-500" /> Bookmarked Jobs
+    </h1>
     <div v-if="bookmarks && bookmarks.length" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <NuxtLink v-for="bookmark in bookmarks" :key="bookmark.id" :to="`/job/${bookmark.id}`" class="group bg-white p-6 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition
                hover:border-blue-500 focus-visible:outline-2 focus-visible:outline-blue-500">
@@ -32,14 +34,14 @@
 </template>
 
 <script setup lang="ts">
-import { BookmarkSlashIcon } from '@heroicons/vue/24/solid'
+import { BookmarkSlashIcon, BookmarkIcon } from '@heroicons/vue/24/solid'
 import type { Job } from '~/types/index'
 
 // Auth token
-const { token } = useAuth()
+const { token, isAuthenticated } = useAuth()
 
 const { data: bookmarks, error } = await useAsyncData<Job[]>('bookmarks', async () => {
-  if (!token.value) return []
+  if (!isAuthenticated()) return []
   const res = await useApi<Job[]>('/bookmarks', {
     headers: { Authorization: `Bearer ${token.value}` },
   })
