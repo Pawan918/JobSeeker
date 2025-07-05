@@ -2,44 +2,49 @@
   <div class="max-w-7xl mx-auto px-6 py-12">
     <div class="flex items-center justify-between mb-10">
       <h1 class="text-4xl font-bold text-gray-900">🗂 My Posted Jobs</h1>
-      <button @click="confirmDeleteAll"
-        class="inline-flex items-center px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm transition">
-        🗑 Delete All Jobs
-      </button>
+      <BaseButton variant="danger" size="md" :disabled="!jobs?.length" @click="confirmDeleteAll" class="gap-2">
+        <TrashIcon class="w-5 h-5" />
+        Delete All Jobs
+      </BaseButton>
     </div>
 
     <div v-if="jobs && jobs.length" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
       <div v-for="job in jobs" :key="job.id"
         class="relative group bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
         <div class="p-6 flex flex-col h-full">
+          <!-- Options Button -->
           <div class="absolute top-4 right-4 z-20">
             <div class="relative">
               <button @click="togglePopover(job.id)" class="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                  class="w-5 h-5 text-gray-500">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M6 12h.01M12 12h.01M18 12h.01" />
-                </svg>
+                <EllipsisHorizontalIcon class="w-5 h-5 text-gray-500" />
               </button>
 
               <div v-if="openPopoverId === job.id"
                 class="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg border border-gray-100 z-30">
-                <button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50" @click="editJob(job.id)">✏️
-                  Edit</button>
+                <button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50" @click="editJob(job.id)">
+                  <PencilIcon class="w-5 h-5" />
+                  Edit
+                </button>
                 <button class="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
-                  @click="deleteJob(job.id)">🗑 Delete</button>
+                  @click="deleteJob(job.id)">
+                  🗑 Delete
+                </button>
               </div>
             </div>
           </div>
 
+          <!-- Job Content -->
           <h2 class="text-lg font-semibold text-blue-700 group-hover:underline">
             {{ job.title }}
           </h2>
           <p class="text-sm text-gray-600 font-medium mt-1">
             {{ job.company }} <span class="text-gray-400">· {{ job.location }}</span>
           </p>
-          <p class="text-sm text-gray-700 line-clamp-3 mt-2">{{ job.description }}</p>
+          <p class="text-sm text-gray-700 line-clamp-3 mt-2">
+            {{ job.description }}
+          </p>
 
+          <!-- Tags -->
           <div class="mt-4 flex flex-wrap gap-2">
             <span v-for="tag in job.tags" :key="tag"
               class="bg-gray-100 text-gray-700 px-2 py-0.5 text-xs rounded-full font-medium">
@@ -47,6 +52,7 @@
             </span>
           </div>
 
+          <!-- Type -->
           <div class="mt-auto pt-4 text-right">
             <span
               class="inline-block text-xs font-semibold px-2 py-1 bg-blue-50 text-blue-700 rounded-full border border-blue-100">
@@ -65,17 +71,18 @@
 
 <script setup lang="ts">
 import type { Job } from '~/types/index'
+import BaseButton from '~/components/BaseButton.vue'
+import { PencilIcon, TrashIcon } from '@heroicons/vue/24/solid'
 const { token } = useAuth()
 const router = useRouter()
 const openPopoverId = ref<number | null>(null)
 
-const { data: jobs } = useAsyncData<Job[]>('my-jobs', async () => {
+const { data: jobs } = await useAsyncData<Job[]>('my-jobs', async () => {
   if (!token.value) return []
   return await useApi('/my-jobs', {
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
-    server: true,
   })
 })
 

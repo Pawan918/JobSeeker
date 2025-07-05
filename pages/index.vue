@@ -147,10 +147,8 @@ const toQuery = () => {
     return p.toString()
 }
 
-const { data: jobData } = useAsyncData('jobs', async () => {
-    return await useApi<{ jobs: Job[]; total: number }>(`/jobs?${toQuery()}`, {
-        server: true,
-    })
+const { data: jobData } = await useAsyncData('jobs', async () => {
+    return await useApi<{ jobs: Job[]; total: number }>(`/jobs?${toQuery()}`)
 })
 
 

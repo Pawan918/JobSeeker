@@ -47,13 +47,12 @@ const formatDate = (dateStr: string) => {
   })
 }
 
-const { data, error } = useAsyncData('my-applications', async () => {
+const { data, error } = await useAsyncData('my-applications', async () => {
   if (!token.value) return []
   const res = await useApi<Application[]>('/my-applications', {
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
-    server: true
   })
   return res
 })

@@ -97,10 +97,9 @@ const applied = ref(false)
 
 const { token } = useAuth()
 
-const { data: job, error } = useAsyncData<Job>(
+const { data: job, error } = await useAsyncData<Job>(
   `job-${jobId}`,
   () => useApi<Job>(`/jobs/${jobId}`),
-  { server: true }
 )
 
 const copyLink = () => {

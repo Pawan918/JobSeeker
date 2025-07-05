@@ -1,14 +1,14 @@
 <template>
-    <button :class="computedClass" :disabled="disabled">
-        <slot />
-    </button>
+  <button :class="computedClass" :disabled="disabled">
+    <slot />
+  </button>
 </template>
 
 <script setup lang="ts">
 import { withDefaults, defineProps } from 'vue';
 const props = withDefaults(
   defineProps<{
-    variant?: 'primary' | 'secondary' | 'outline'
+    variant?: 'primary' | 'secondary' | 'outline' | 'danger'
     size?: 'sm' | 'md' | 'lg'
     disabled?: boolean
   }>(),
@@ -20,10 +20,11 @@ const props = withDefaults(
 )
 
 const computedClass = computed<string>(() => {
-  const variants: Record<'primary' | 'secondary' | 'outline', string> = {
+  const variants: Record<'primary' | 'secondary' | 'outline' | 'danger', string> = {
     primary: 'bg-blue-600 text-white hover:bg-blue-700',
     secondary: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
-    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50',
+    danger: 'bg-red-600 text-white hover:bg-red-700'
   }
 
   const sizes: Record<'sm' | 'md' | 'lg', string> = {
