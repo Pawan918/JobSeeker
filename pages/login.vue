@@ -30,10 +30,11 @@ const { setAuth } = useAuth()
 
 async function handleLogin() {
   try {
-    const res = await useApi('/login', {
+    const res = await useApi('/auth/login', {
       method: 'POST',
       body: form
     })
+    console.log('Login response:', res)
     setAuth(res.token, res.user)
     router.push('/')
   } catch (error: any) {

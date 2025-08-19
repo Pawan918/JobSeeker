@@ -14,6 +14,7 @@ export default async function useApi<T = any>(
 ): Promise<T> {
   const config = useRuntimeConfig()
   const baseURL = config.public.apiBase || 'http://localhost:5000/api'
+  const token = useCookie<string | null>('token')
 
   const headers: Record<string, string> = {
     ...options.headers,
@@ -22,9 +23,9 @@ export default async function useApi<T = any>(
   if (!(options.body instanceof FormData)) {
     headers['Content-Type'] = headers['Content-Type'] ?? 'application/json'
   }
-
-  if (options.token) {
-    headers['Authorization'] = `Bearer ${options.token}`
+  
+  if (token.value && !headers['Authorization']) {
+    headers['Authorization'] = `Bearer ${token.value}`
   }
 
   return await ofetch<T>(path, {

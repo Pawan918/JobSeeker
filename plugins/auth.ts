@@ -1,4 +1,4 @@
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin(async() => {
   const auth = useAuth()
-  auth.initAuth()
+  await auth.initAuth()
 })

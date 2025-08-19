@@ -12,7 +12,7 @@
                 </p>
             </div>
 
-            <NuxtLink to="/post" class="shrink-0 self-start sm:self-auto">
+            <NuxtLink to="/post" class="shrink">
                 <BaseButton variant="primary" size="md" class="gap-2">
                     <PlusIcon class="h-5 w-5" />
                     Post&nbsp;Job
@@ -148,6 +148,7 @@ const toQuery = () => {
 }
 
 const { data: jobData } = await useAsyncData('jobs', async () => {
+    console.log('Fetching jobs with filters:', toQuery())
     return await useApi<{ jobs: Job[]; total: number }>(`/jobs?${toQuery()}`)
 })
 
@@ -168,7 +169,7 @@ const fetchBookmarks = async () => {
 }
 
 const fetchAppliedJobs = async () => {
-    const apps = await useApi<{ jobId: number }[]>('/my-applications', {
+    const apps = await useApi<{ jobId: number }[]>('/applications/me', {
         headers: { Authorization: `Bearer ${token.value}` },
     })
     appliedJobIds.value = apps.map((a) => a.jobId)

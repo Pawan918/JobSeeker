@@ -39,7 +39,7 @@
             class="bg-blue-600 hover:bg-blue-700 transition text-white font-medium px-6 py-2 rounded-lg disabled:opacity-50">
             <span v-if="loading">Updating...</span>
             <span v-else class="flex items-center gap-2">
-              <RocketLaunchIcon class="w-4 h-4"/> Update Job
+              <RocketLaunchIcon class="w-4 h-4" /> Update Job
             </span>
           </button>
         </div>

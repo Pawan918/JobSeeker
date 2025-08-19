@@ -28,7 +28,7 @@
   
   async function handleRegister() {
   try {
-    await useApi('/register', {
+    await useApi('/auth/register', {
       method: 'POST',
       body: form
     })

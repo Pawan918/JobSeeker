@@ -162,7 +162,7 @@ const toggleBookmark = async () => {
 
 const checkIfApplied = async () => {
   try {
-    const applications = await useApi<Application[]>('/my-applications', {
+    const applications = await useApi<Application[]>('/applications/me', {
       headers: { Authorization: `Bearer ${token.value}` }
     })
     applied.value = applications.some(app => app.job?.id === jobId)

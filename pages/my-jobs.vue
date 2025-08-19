@@ -15,7 +15,7 @@
         class="relative group bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
         <div class="p-6 flex flex-col h-full">
           <div class="absolute top-4 right-4 z-20">
-            <BasePopover >
+            <BasePopover>
               <template #content>
                 <button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
                   @click="editJob(job.id)">
@@ -76,7 +76,7 @@ const openPopoverId = ref<number | null>(null)
 
 const { data: jobs } = await useAsyncData<Job[]>('my-jobs', async () => {
   if (!token.value) return []
-  return await useApi('/my-jobs', {
+  return await useApi('/jobs/me', {
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
@@ -101,7 +101,7 @@ const deleteJob = async (id: number) => {
 
 const confirmDeleteAll = async () => {
   try {
-    await useApi(`/my-jobs/delete-all`, {
+    await useApi(`/jobs/me/delete-all`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token.value}`,
