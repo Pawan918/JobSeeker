@@ -1,6 +1,6 @@
 <template>
   <header class="bg-white border-b shadow-sm sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto px-4">
       <div class="flex h-16 items-center justify-between">
         <NuxtLink to="/" class="text-2xl font-bold text-blue-600 tracking-tight">
           DevJobsHub
@@ -20,7 +20,7 @@
               </template>
               <template #content>
                 <button class="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-                  @click="logout">
+                  @click="handleLogout">
                   <ArrowLeftStartOnRectangleIcon class="w-4 h-4" />
                   Log out
                 </button>
@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { ArrowLeftStartOnRectangleIcon } from '@heroicons/vue/24/solid'
 
-const { user, clearAuth } = useAuth()
+const { user, logout } = useAuth()
 
 const navigationRoutes = [
   {
@@ -60,8 +60,8 @@ const navigationRoutes = [
   }
 ]
 
-function logout() {
-  clearAuth()
+async function handleLogout() {
+  await logout()
   navigateTo('/login')
 }
 </script>

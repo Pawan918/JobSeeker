@@ -17,12 +17,14 @@
           <div class="absolute top-4 right-4 z-20">
             <BasePopover>
               <template #content>
-                <button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                <button
+                  class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
                   @click="editJob(job.id)">
-                  <PencilIcon class="w-4 h-4" />
+                  <PencilSquareIcon class="w-4 h-4" />
                   Edit
                 </button>
-                <button class="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                <button
+                  class="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer"
                   @click="deleteJob(job.id)">
                   <TrashIcon class="w-4 h-4" />
                   Delete
@@ -69,6 +71,7 @@ import type { Job } from '~/types/index'
 import BaseButton from '~/components/BaseButton.vue'
 import BasePopover from '~/components/BasePopover.vue'
 import { PencilIcon, TrashIcon, EllipsisHorizontalIcon, FolderIcon } from '@heroicons/vue/24/outline'
+import { PencilSquareIcon } from '@heroicons/vue/24/solid';
 const toast = useNotification();
 const { token } = useAuth()
 const router = useRouter()

@@ -120,7 +120,7 @@ const applyToJob = async () => {
   if (!job.value) return
 
   try {
-    await useApi(`/apply/${job.value.id}`, {
+    await useApi(`/jobs/apply/${job.value.id}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token.value}` }
     })
@@ -152,8 +152,11 @@ const toggleBookmark = async () => {
       method,
       headers: { Authorization: `Bearer ${token.value}` }
     })
-    bookmarked.value = !bookmarked.value
-    toast.success('bookmarked successfully')
+    bookmarked.value = !bookmarked.value;
+    if (bookmarked.value)
+      toast.success('bookmarked successfully')
+    else
+      toast.success('removed from bookmarks')
   } catch (err: any) {
     toast.error('Network error')
   }

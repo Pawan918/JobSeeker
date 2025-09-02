@@ -152,6 +152,9 @@ const { data: jobData } = await useAsyncData('jobs', async () => {
     return await useApi<{ jobs: Job[]; total: number }>(`/jobs?${toQuery()}`)
 })
 
+watch(filters, () => {
+    currentPage.value = 1
+})
 
 watch(
     [filters, currentPage],
@@ -199,6 +202,7 @@ const toggleBookmark = async (jobId: number) => {
         toast.error('Network error')
     }
 }
+
 const jobs = computed(() => jobData.value?.jobs ?? [])
 const totalJobs = computed(() => jobData.value?.total ?? 0)
 const totalPages = computed(() => Math.ceil(totalJobs.value / limit))

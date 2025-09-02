@@ -6,6 +6,7 @@ export interface ApiOptions {
   headers?: Record<string, string>
   token?: string
   server?: boolean
+  credentials?: RequestCredentials
 }
 
 export default async function useApi<T = any>(
@@ -23,16 +24,35 @@ export default async function useApi<T = any>(
   if (!(options.body instanceof FormData)) {
     headers['Content-Type'] = headers['Content-Type'] ?? 'application/json'
   }
-  
+
   if (token.value && !headers['Authorization']) {
     headers['Authorization'] = `Bearer ${token.value}`
   }
 
-  return await ofetch<T>(path, {
-    baseURL,
-    method: options.method ?? 'GET',
-    headers,
-    body: options.body,
-    retry: 2,
-  })
+  try {
+    return await ofetch<T>(path, {
+      baseURL,
+      method: options.method ?? 'GET',
+      headers,
+      body: options.body,
+      credentials: 'include',
+      retry: 2,
+    })
+  } catch (err: any) {
+    if (err?.response?.status === 401 && token.value) {
+      const { refreshToken } = useAuth()
+      const newToken = await refreshToken()
+      headers['Authorization'] = `Bearer ${newToken}`
+
+      return await ofetch<T>(path, {
+        baseURL,
+        method: options.method ?? 'GET',
+        headers,
+        body: options.body,
+        retry: 0,
+        credentials: 'include',
+      })
+    }
+    throw err
+  }
 }
