@@ -10,8 +10,4 @@
 
 <script setup lang="ts">
 import Header from '@/components/Header.vue'
-
-onMounted(() => {
-  useAuth().initAuth()
-})
 </script>
