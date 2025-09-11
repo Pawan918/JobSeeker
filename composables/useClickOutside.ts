@@ -2,24 +2,28 @@ import { onMounted, onBeforeUnmount, type Ref } from 'vue'
 
 export function useClickOutside(
   elementRef: Ref<HTMLElement | null>,
-  handler: (event: MouseEvent | TouchEvent) => void
+  handler: (event: MouseEvent | TouchEvent) => void,
+  options: { events?: (keyof DocumentEventMap)[]; active?: Ref<boolean> } = {}
 ) {
-  const listener = (event: MouseEvent | TouchEvent) => {
+  const { events = ['mousedown', 'touchstart'], active } = options
+
+  const listener = (event: Event) => {
     const el = elementRef.value
     if (!el) return
+    if (active && !active.value) return
 
     if (event.target instanceof Node && !el.contains(event.target)) {
-      handler(event)
+      handler(event as MouseEvent | TouchEvent)
     }
   }
 
   onMounted(() => {
-    document.addEventListener('click', listener)
-    document.addEventListener('touchstart', listener)
+    if (typeof window === 'undefined') return
+    events.forEach((evt) => document.addEventListener(evt, listener))
   })
 
   onBeforeUnmount(() => {
-    document.removeEventListener('click', listener)
-    document.removeEventListener('touchstart', listener)
+    if (typeof window === 'undefined') return
+    events.forEach((evt) => document.removeEventListener(evt, listener))
   })
 }

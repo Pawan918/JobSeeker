@@ -5,10 +5,13 @@
       <form @submit.prevent="handleLogin" class="space-y-4">
         <input v-model="form.email" type="email" required placeholder="Email address"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <p v-if="errors.email" class="text-sm text-red-500">{{ errors.email }}</p>
         <input v-model="form.password" type="password" required placeholder="Password"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        <button type="submit"
-          class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition">
+
+        <p v-if="errors.password" class="text-sm text-red-500">{{ errors.password }}</p>
+        <button type="submit" :disabled="isLoginBtnDisabled"
+          class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition disabled:bg-blue-400">
           Log In
         </button>
       </form>
@@ -24,21 +27,56 @@
 </template>
 
 <script setup lang="ts">
+import { z } from 'zod'
+
 const form = reactive({ email: '', password: '' })
+const isLoading = ref(false)
 const router = useRouter()
 const { setAuth } = useAuth()
 
+
+const loginSchema = z.object({
+  email: z.string().email('Please enter a valid email'),
+  password: z.string().min(8, 'Password must be at least 8 characters')
+})
+
+const errors = reactive<{ email?: string; password?: string }>({})
+
+const isLoginBtnDisabled = computed(() => {
+  return !form.email || !form.password || isLoading.value
+})
+
+
 async function handleLogin() {
   try {
+    errors.email = undefined
+    errors.password = undefined
+
+    loginSchema.parse(form)
+
+    isLoading.value = true
     const res = await useApi('/auth/login', {
       method: 'POST',
       body: form
     })
-    console.log('Login response:', res)
     setAuth(res.token, res.user)
     router.push('/')
   } catch (error: any) {
+    isLoading.value = false
+
+    if (error instanceof z.ZodError) {
+      error.errors.forEach((err: any) => {
+        if (err.path[0] === 'email') errors.email = err.message
+        if (err.path[0] === 'password') errors.password = err.message
+      })
+      return
+    }
+
     alert(error?.data?.error || 'Login failed')
   }
 }
+
+onBeforeMount(() => {
+  isLoading.value = false
+})
 </script>
