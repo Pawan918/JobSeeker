@@ -18,7 +18,7 @@
             <BasePopover>
               <template #content>
                 <button
-                  class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
+                  class="w-32 px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
                   @click="editJob(job.id)">
                   <PencilSquareIcon class="w-4 h-4" />
                   Edit

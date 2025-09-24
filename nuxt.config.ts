@@ -8,11 +8,19 @@ export default defineNuxtConfig({
       apiBase: process.env.API_BASE_URL
     }
   },
-  modules: ['nuxt-zod-i18n', '@nuxtjs/i18n', 'nuxt-toast'],
+  modules: ['nuxt-zod-i18n', '@nuxtjs/i18n', 'nuxt-toast', 'nuxt-socket-io'],
   css: ['~/assets/css/main.css'],
   vite: {
     plugins: [
       tailwindcss(),
     ],
   },
+  io: {
+    // module options
+    sockets: [{
+      name: 'main',
+      url: 'http://localhost:5000',
+      default: true
+    }]
+  }
 })

@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid'
 import BaseButton from './BaseButton.vue'
 

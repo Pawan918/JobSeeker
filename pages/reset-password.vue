@@ -70,7 +70,7 @@ const handleSubmit = async () => {
 
     try {
         loading.value = true
-        await useApi('/reset-password', {
+        await useApi('/auth/reset-password', {
             method: 'POST',
             body: {
                 token,
