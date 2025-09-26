@@ -6,6 +6,12 @@
           DevJobsHub
         </NuxtLink>
 
+        <nav class="hidden md:flex items-center space-x-6 text-sm text-gray-700 font-medium">
+          <NuxtLink activeClass="text-blue-600" :to="nav.to" class="hover:text-blue-600 transition"
+            v-for="(nav) in navigationRoutes" :key="nav.name">
+            {{ nav.name }}
+          </NuxtLink>
+        </nav>
         <div class="flex items-center space-x-4 text-sm">
           <template v-if="user">
             <!-- Notifications Popover -->
@@ -82,6 +88,20 @@ import { formatDate } from '~/utils/index'
 
 const { user, logout, token } = useAuth()
 const { notifications, markAsRead } = useRealtime()
+const navigationRoutes = [
+  {
+    name: 'Home',
+    to: '/'
+  },
+  {
+    name: 'My Jobs',
+    to: '/my-jobs'
+  },
+  {
+    name: 'Applied Jobs',
+    to: '/application',
+  }
+]
 
 const unreadCount = computed(() =>
   notifications.value.filter(n => !n.isRead).length

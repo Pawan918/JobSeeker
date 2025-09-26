@@ -11,14 +11,13 @@
     </div>
 
     <div v-if="jobs && jobs.length" class="grid gap-8 sm: grid-cols-2 lg:grid-cols-3">
-      <div v-for="job in jobs" :key="job.id"
+      <div v-for="job in jobs" :key="job.id" @click="router.push(`/my-jobs/${job.id}`)"
         class="relative group bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
         <div class="p-6 flex flex-col h-full">
           <div class="absolute top-4 right-4 z-20">
-            <BasePopover>
+            <BasePopover @click.stop>
               <template #content>
-                <button
-                  class="w-32 px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
+                <button class="w-32 px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
                   @click="editJob(job.id)">
                   <PencilSquareIcon class="w-4 h-4" />
                   Edit
@@ -70,7 +69,7 @@
 import type { Job } from '~/types/index'
 import BaseButton from '~/components/BaseButton.vue'
 import BasePopover from '~/components/BasePopover.vue'
-import { PencilIcon, TrashIcon, EllipsisHorizontalIcon, FolderIcon } from '@heroicons/vue/24/outline'
+import { TrashIcon, FolderIcon } from '@heroicons/vue/24/outline'
 import { PencilSquareIcon } from '@heroicons/vue/24/solid';
 const toast = useNotification();
 const { token } = useAuth()

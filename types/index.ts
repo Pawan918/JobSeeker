@@ -7,7 +7,7 @@ export interface User {
   jobs: Job[]
   bookmarks: Bookmark[]
   applications: Application[]
-  createdAt: string 
+  createdAt: string
 }
 
 export interface Job {
@@ -41,6 +41,7 @@ export interface Application {
   job: Job
   jobId: number
   createdAt: string
+  status : 'PENDING' | 'ACCEPTED' | 'REJECTED'
 }
 export interface RefreshToken {
   id: number
@@ -50,4 +51,28 @@ export interface RefreshToken {
   expiresAt: string
   createdAt: string
 }
+
+export type JobApplication = {
+  id: number;
+  status: "PENDING" | "ACCEPTED" | "REJECTED";
+  createdAt: string;
+  coverLetter?: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    profileImage?: string;
+    resumeUrl?: string;
+  };
+};
+
+export type JobApplicationsResponse = {
+  job: {
+    id: number;
+    title: string;
+    type: string;
+    company: string;
+  };
+  applicants: JobApplication[];
+};
 

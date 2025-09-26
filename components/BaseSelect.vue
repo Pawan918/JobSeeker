@@ -61,7 +61,6 @@ const selectOption = (option) => {
 }
 
 useClickOutside(dropdownRef, () => {
-    console.log('clicked outside')
     isOpen.value = false
 })
 </script>
