@@ -100,11 +100,8 @@ import type { Job, JobApplicationsResponse } from '~/types/index'
 
 const route = useRoute()
 const jobId = Number(route.params.id)
-const jobTitle = ref('')
 
-// Notification & auth
 const toast = useNotification()
-const { token } = useAuth()
 
 const { data: job } = await useAsyncData<Job>(
     `job-${jobId}`,
