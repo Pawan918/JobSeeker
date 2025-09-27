@@ -9,22 +9,21 @@
             <form @submit.prevent="submitJob" class="grid gap-6 grid-cols-1 sm:grid-cols-2">
 
                 <BaseInput v-model="form.title" label="Job Title" placeholder="e.g. Senior Vue Developer"
-                    :has-icon="true" :error="errors.title">
-                    <template #icon>
+                    :error="errors.title">
+                    <template #iconLeft>
                         <BriefcaseIcon class="w-5 h-5 text-blue-500" />
                     </template>
                 </BaseInput>
 
-                <BaseInput v-model="form.company" label="Company" placeholder="e.g. TechNova" :has-icon="true"
-                    :error="errors.company">
-                    <template #icon>
+                <BaseInput v-model="form.company" label="Company" placeholder="e.g. TechNova" :error="errors.company">
+                    <template #iconLeft>
                         <BuildingOfficeIcon class="w-5 h-5 text-blue-500" />
                     </template>
                 </BaseInput>
 
                 <BaseInput v-model="form.location" label="Location" placeholder="e.g. Remote / Bangalore"
-                    :has-icon="true" :error="errors.location">
-                    <template #icon>
+                    :error="errors.location">
+                    <template #iconLeft>
                         <MapPinIcon class="w-5 h-5 text-blue-500" />
                     </template>
                 </BaseInput>
@@ -32,16 +31,16 @@
                 <BaseSelect v-model="form.type" label="Job Type" :options="jobTypeOptions" placeholder="Select job type"
                     :error="errors.type" />
 
-                <BaseInput v-model="form.tags" label="Tags (comma separated)" placeholder="e.g. vue, nuxt, tailwind"
-                    :has-icon="true">
-                    <template #icon>
+                <BaseInput v-model="form.tags" label="Tags (comma separated)" placeholder="e.g. vue, nuxt, tailwind">
+                    <template #iconLeft>
                         <TagIcon class="w-5 h-5 text-blue-500" />
                     </template>
                 </BaseInput>
 
                 <FormField label="Description" class="sm:col-span-2">
                     <textarea v-model="form.description" rows="5"
-                        placeholder="Write a short description about the job..." class="form-input" />
+                        placeholder="Write a short description about the job..."
+                        class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     <p v-if="errors.description" class="text-red-600 text-xs mt-1">{{ errors.description }}</p>
                 </FormField>
 
@@ -76,7 +75,7 @@ import BaseButton from '~/components/BaseButton.vue'
 import FormField from '~/components/FormField.vue'
 import { z } from 'zod'
 
-const { user, token, isAuthenticated } = useAuth()
+const { token, isAuthenticated } = useAuth()
 const router = useRouter()
 const toast = useNotification()
 
@@ -99,8 +98,7 @@ const jobSchema = z.object({
     tags: z.string().optional(),
     description: z.string().min(10, 'Description must be at least 10 characters'),
 })
-
-const errors = reactive<Record<string, string | undefined>>({})
+const { validate, errors } = useValidation(jobSchema)
 const successMessage = ref('')
 const loading = ref(false)
 
@@ -115,32 +113,20 @@ const submitJob = async () => {
         toast.info('Please login to post job')
         return router.push('/login')
     }
-
-    const parseResult = jobSchema.safeParse(form.value)
-    Object.keys(errors).forEach(k => (errors[k] = undefined))
-
-    if (!parseResult.success) {
-        const flattened = parseResult.error.flatten().fieldErrors
-        Object.assign(errors, flattened)
-        return
-    }
-
+    if (!validate(form.value)) return
     loading.value = true
 
     try {
         const body = {
-            ...parseResult.data,
-            tags: parseResult.data.tags
-                ? parseResult.data.tags.split(',').map(t => t.trim()).filter(Boolean)
+            ...form.value,
+            tags: form.value.tags
+                ? form.value.tags.split(',').map(t => t.trim()).filter(Boolean)
                 : [],
         }
 
         await useApi('/jobs', {
             method: 'POST',
             body,
-            headers: {
-                Authorization: `Bearer ${token.value}`,
-            },
         })
 
         successMessage.value = '✅ Job posted successfully!'
@@ -153,29 +139,9 @@ const submitJob = async () => {
             description: '',
         })
     } catch (error: any) {
-        toast.error('Network error')
+        toast.error('Failed to post job: ' + (error?.data?.error || 'Unknown error'))
     } finally {
         loading.value = false
     }
 }
 </script>
-
-<style scoped>
-.form-input {
-    display: block;
-    width: 100%;
-    border-radius: 0.5rem;
-    border: 1px solid #d1d5db;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.95rem;
-    color: #111827;
-    background-color: white;
-    transition: border-color 0.2s ease;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-}
-</style>

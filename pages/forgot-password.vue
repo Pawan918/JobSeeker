@@ -10,24 +10,20 @@
           Enter your registered email address. We'll send you a secure link to reset your password.
         </p>
 
-        <form @submit.prevent="handleSubmit" class="space-y-5" novalidate>
+        <form @submit.prevent="handleSubmit" class="space-y-5">
           <div>
             <BaseInput v-model="email" type="email" label="Email Address" placeholder="you@example.com"
-              autocomplete="email" :has-icon="true" :aria-invalid="!!errorMsg" required>
-              <template #icon>
+              autocomplete="email" :has-icon="true" :aria-invalid="!!errors" required>
+              <template #iconLeft>
                 <AtSymbolIcon class="w-5 h-5 text-blue-500" />
               </template>
             </BaseInput>
-            <p v-if="errorMsg" class="text-xs text-red-600 mt-1 ml-1">{{ errorMsg }}</p>
+            <p v-if="errors.email" class="text-xs text-red-600 mt-1 ml-1">{{ errors.email }}</p>
           </div>
 
           <BaseButton type="submit" class="w-full" :disabled="loading">
             <template v-if="loading">
-              <svg class="animate-spin h-5 w-5 mr-2 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-              </svg>
+              <ArrowPathIcon v-if="loading" class="w-5 h-5 mr-2 animate-spin inline-block" />
               Sending...
             </template>
             <template v-else>Send Reset Link</template>
@@ -44,28 +40,21 @@ import { z } from 'zod'
 import BaseInput from '~/components/BaseInput.vue'
 import BaseButton from '~/components/BaseButton.vue'
 import { useNotification } from '~/composables/useNotification'
-import { EnvelopeIcon, AtSymbolIcon } from '@heroicons/vue/24/solid'
+import { EnvelopeIcon, AtSymbolIcon, ArrowPathIcon } from '@heroicons/vue/24/solid'
 
 const email = ref('')
-const errorMsg = ref('')
 const loading = ref(false)
 const { success, error } = useNotification()
 
 const schema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
 })
+const { validate, errors } = useValidation(schema)
 
 const handleSubmit = async () => {
-  errorMsg.value = ''
-  const result = schema.safeParse({ email: email.value })
-
-  if (!result.success) {
-    errorMsg.value = result.error.flatten().fieldErrors.email?.[0] || 'Invalid email'
-    return
-  }
-
+  if (!validate({ email: email.value })) return
+  loading.value = true
   try {
-    loading.value = true
 
     await useApi('/auth/forgot-password', {
       method: 'POST',

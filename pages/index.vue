@@ -22,9 +22,8 @@
 
         <section class="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 py-6 mb-12">
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 items-end">
-                <BaseInput v-model="filters.search" label="Search" placeholder="Search by title, company, or keyword"
-                    :has-icon="true">
-                    <template #icon>
+                <BaseInput v-model="filters.search" label="Search" placeholder="Search by title, company, or keyword">
+                    <template #iconLeft>
                         <MagnifyingGlassIcon class="w-5 h-5 text-blue-500" />
                     </template>
                 </BaseInput>

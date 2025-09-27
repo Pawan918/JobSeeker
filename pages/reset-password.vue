@@ -12,10 +12,11 @@
 
             <form @submit.prevent="handleSubmit" class="space-y-6">
                 <BaseInput v-model="password" type="password" label="New Password" placeholder="Enter a new password"
-                    autocomplete="new-password" :has-icon="true" required>
-                    <template #icon>
+                    autocomplete="new-password" required>
+                    <template #iconLeft>
                         <KeyIcon class="w-5 h-5 text-blue-500" />
                     </template>
+                    <p v-if="errors.password" class="text-sm text-red-500">{{ errors.password }}</p>
                 </BaseInput>
 
                 <BaseButton type="submit" class="w-full" :disabled="loading">
@@ -55,21 +56,18 @@ onMounted(() => {
     }
 })
 
-const passwordSchema = z
-    .string()
-    .min(6, 'Password must be at least 6 characters')
-    .max(64, 'Password too long')
+const passwordSchema = z.object({
+    password: z
+        .string()
+        .min(6, 'Password must be at least 6 characters')
+        .max(64, 'Password too long'),
+})
+const { validate, errors } = useValidation(passwordSchema)
 
 const handleSubmit = async () => {
-    const result = passwordSchema.safeParse(password.value)
-
-    if (!result.success) {
-        error(result.error.errors[0].message)
-        return
-    }
-
+    if (!validate({ password: password.value })) return
+    loading.value = true
     try {
-        loading.value = true
         await useApi('/auth/reset-password', {
             method: 'POST',
             body: {

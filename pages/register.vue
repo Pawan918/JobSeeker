@@ -3,12 +3,32 @@
     <div class="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
       <h2 class="text-3xl font-bold text-gray-900 text-center mb-6">Create Account</h2>
       <form @submit.prevent="handleRegister" class="space-y-4">
-        <BaseInput v-model="form.name" type="text" name="name" autocomplete="name" required placeholder="Full Name" />
-        <BaseInput v-model="form.email" type="email" name="email" autocomplete="email" required
-          placeholder="Email address" />
-        <BaseInput v-model="form.password" type="password" name="password" autocomplete="new-password" required
-          placeholder="Password" />
-        <BaseButton type="submit" class="w-full py-3 font-semibold">Sign Up</BaseButton>
+        <div>
+          <BaseInput v-model="form.name" type="text" name="name" autocomplete="name" required placeholder="Full Name" />
+          <p v-if="errors.name" class="text-sm text-red-500">{{ errors.name }}</p>
+        </div>
+        <div>
+          <BaseInput v-model="form.email" type="email" name="email" autocomplete="email" required
+            placeholder="Email address" />
+          <p v-if="errors.email" class="text-sm text-red-500">{{ errors.email }}</p>
+        </div>
+        <div>
+          <BaseInput v-model="form.password" :type="showPassword ? 'text' : 'password'" name="password"
+            autocomplete="new-password" required placeholder="Password" class="relative">
+            <template #iconRight>
+              <div @click="showPassword = !showPassword" class="cursor-pointer">
+                <EyeIcon v-if="!showPassword" class="w-5 h-5" />
+                <EyeSlashIcon v-else class="w-5 h-5" />
+              </div>
+            </template>
+          </BaseInput>
+          <p v-if="errors.password" class="text-sm text-red-500">{{ errors.password }}</p>
+        </div>
+        <BaseButton type="submit" class="w-full py-3 font-semibold text-lg" :disabled="isSignUpBtnDisabled"
+          variant="primary">
+          <ArrowPathIcon v-if="isLoading" class="w-5 h-5 mr-2 animate-spin inline-block" />
+          <span> Sign Up </span>
+        </BaseButton>
       </form>
       <p class="text-sm text-gray-600 mt-4 text-center">
         Already have an account?
@@ -19,23 +39,42 @@
 </template>
 
 <script setup lang="ts">
+import { ArrowPathIcon, EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/solid'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { z } from 'zod'
+
+const router = useRouter()
+const toast = useNotification();
 
 const form = reactive({ name: '', email: '', password: '' })
-const router = useRouter()
+const isLoading = ref(false)
+const showPassword = ref(false);
+const schema = z.object({
+  name: z.string().min(3, 'Name must be at least 3 characters'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters')
+})
+const { validate, errors } = useValidation(schema)
+
+const isSignUpBtnDisabled = computed(() => {
+  return !form.name || !form.email || !form.password || isLoading.value
+})
 
 async function handleRegister() {
+  if (!validate(form)) return
+  isLoading.value = true
   try {
     await useApi('/auth/register', {
       method: 'POST',
       body: form
     })
-
-    alert('Registered successfully!')
+    toast.success('Registered successfully!')
     router.push('/login')
   } catch (error: any) {
-    alert(error?.data?.error || 'Signup failed')
+    toast.error(error?.data?.error || 'Signup failed')
+  } finally {
+    isLoading.value = false
   }
 }
 </script>

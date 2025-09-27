@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen grid grid-rows-[auto_1fr] bg-gray-50 text-gray-800">
     <Header />
-    <main class="pt-4">
+    <main>
       <NuxtPage />
     </main>
   </div>

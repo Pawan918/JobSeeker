@@ -5,26 +5,31 @@
     </label>
 
     <div class="relative">
-      <input
-        :type="type"
-        :value="modelValue"
-        :placeholder="placeholder"
-        @input="$emit('update:modelValue', $event.target.value)"
-        :class="[
-          'w-full py-2.5 pr-4 rounded-lg text-sm border border-gray-300',
-          hasIcon ? 'pl-10' : 'px-4',
-          'focus-visible:outline-blue-500 focus:ring-2 focus:ring-blue-100 focus:border-blue-500 shadow-sm placeholder-gray-400'
-        ]"
-      />
-      <div v-if="$slots.icon" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-        <slot name="icon" />
+      <input :type="type" :value="modelValue" :placeholder="placeholder"
+        @input="$emit('update:modelValue', $event.target.value)" :class="[
+          'w-full py-2.5 rounded-lg text-sm border border-gray-300 shadow-sm placeholder-gray-400',
+          hasIconLeft ? 'pl-10' : 'pl-4',
+          hasIconRight ? 'pr-10' : 'pr-4',
+          'focus-visible:outline-blue-500 focus:ring-2 focus:ring-blue-100 focus:border-blue-500'
+        ]" />
+
+      <!-- Left Icon -->
+      <div v-if="$slots.iconLeft" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+        <slot name="iconLeft" />
+      </div>
+
+      <!-- Right Icon -->
+      <div v-if="$slots.iconRight" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+        <slot name="iconRight" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { useSlots, computed } from 'vue'
+
+const props = defineProps({
   label: String,
   modelValue: [String, Number],
   placeholder: String,
@@ -32,11 +37,11 @@ defineProps({
     type: String,
     default: 'text',
   },
-  hasIcon: {
-    type: Boolean,
-    default: false,
-  },
 })
 
 defineEmits(['update:modelValue'])
+
+const slots = useSlots()
+const hasIconLeft = computed(() => !!slots.iconLeft)
+const hasIconRight = computed(() => !!slots.iconRight)
 </script>
