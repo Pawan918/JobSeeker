@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     // module options
     sockets: [{
       name: 'main',
-      url: 'http://localhost:5000',
+      url: process.env.API_BASE_URL,
       default: true
     }]
   }
