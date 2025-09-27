@@ -88,8 +88,8 @@
                         </span>
                     </div>
 
-                    <p class="text-xs text-gray-400 mt-2">
-                        <ClockIcon class="inline h-3.5 w-3.5 mr-0.5" />
+                    <p class="text-xs text-gray-400 mt-2 flex items-center">
+                        <ClockIcon class="inline h-3.5 w-3.5 mr-0.5 text-blue-700" />
                         Posted {{ timeAgo(job.createdAt) }}
                     </p>
                 </div>
