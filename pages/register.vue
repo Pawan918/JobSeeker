@@ -3,17 +3,12 @@
     <div class="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
       <h2 class="text-3xl font-bold text-gray-900 text-center mb-6">Create Account</h2>
       <form @submit.prevent="handleRegister" class="space-y-4">
-        <input v-model="form.name" type="text" name="name" autocomplete="name" required placeholder="Full Name"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        <input v-model="form.email" type="email" name="email" autocomplete="email" required placeholder="Email address"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        <input v-model="form.password" type="password" name="password" autocomplete="new-password" required
-          placeholder="Password"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        <button type="submit"
-          class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition">
-          Sign Up
-        </button>
+        <BaseInput v-model="form.name" type="text" name="name" autocomplete="name" required placeholder="Full Name" />
+        <BaseInput v-model="form.email" type="email" name="email" autocomplete="email" required
+          placeholder="Email address" />
+        <BaseInput v-model="form.password" type="password" name="password" autocomplete="new-password" required
+          placeholder="Password" />
+        <BaseButton type="submit" class="w-full py-3 font-semibold">Sign Up</BaseButton>
       </form>
       <p class="text-sm text-gray-600 mt-4 text-center">
         Already have an account?

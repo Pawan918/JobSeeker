@@ -3,18 +3,15 @@
     <div class="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
       <h2 class="text-3xl font-bold text-gray-900 text-center mb-6">Login</h2>
       <form @submit.prevent="handleLogin" class="space-y-4">
-        <input v-model="form.email" type="email" required placeholder="Email address" autocomplete="username"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <BaseInput v-model="form.email" type="email" required placeholder="Email address" autocomplete="username" />
         <p v-if="errors.email" class="text-sm text-red-500">{{ errors.email }}</p>
 
-        <input v-model="form.password" type="password" required placeholder="Password" autocomplete="current-password"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <BaseInput v-model="form.password" type="password" required placeholder="Password"
+          autocomplete="current-password" />
         <p v-if="errors.password" class="text-sm text-red-500">{{ errors.password }}</p>
 
-        <button type="submit" :disabled="isLoginBtnDisabled"
-          class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition disabled:bg-blue-400">
-          Log In
-        </button>
+        <BaseButton type="submit" variant="primary" :disabled="isLoginBtnDisabled" class="w-full py-3">Log In
+        </BaseButton>
       </form>
 
       <p class="text-sm text-gray-600 mt-4 text-center">
