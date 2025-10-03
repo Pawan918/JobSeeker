@@ -50,12 +50,12 @@
                             {{ job.title }}
                         </h2>
 
-                        <button @click.prevent.stop="toggleBookmark(job.id)"
+                        <BaseButton @click.prevent.stop="toggleBookmark(job.id)"
                             :title="bookmarkedJobs.includes(job.id) ? 'Remove bookmark' : 'Bookmark'"
-                            class="p-1.5 rounded-full hover:bg-gray-100 transition focus-visible:outline-2 focus-visible:outline-blue-500">
+                            variant="ghost-light" size="sm" class="!p-1.5" rounded>
                             <component :is="bookmarkedJobs.includes(job.id) ? BookmarkSolid : BookmarkOutline"
-                                :class="['h-5 w-5 cursor-pointer', bookmarkedJobs.includes(job.id) ? 'text-blue-600' : 'text-gray-400']" />
-                        </button>
+                                class="h-5 w-5 text-blue-600 cursor-pointer" />
+                        </BaseButton>
                     </div>
 
                     <p class="text-sm text-gray-600 font-medium">

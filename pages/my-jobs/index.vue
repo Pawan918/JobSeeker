@@ -11,11 +11,11 @@
     </div>
 
     <div v-if="jobs && jobs.length" class="grid gap-8 sm: grid-cols-2 lg:grid-cols-3">
-      <div v-for="job in jobs" :key="job.id" @click="router.push(`/my-jobs/${job.id}`)"
-        class="relative group bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
-        <div class="p-6 flex flex-col h-full">
+      <NuxtLink v-for="job in jobs" :key="job.id" :to="`/my-jobs/${job.id}`"
+        class="relative group bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition hover:border-blue-500 focus-visible:outline-2 focus-visible:outline-blue-500">
+        <div class="p-6 flex flex-col h-full cursor-pointer">
           <div class="absolute top-4 right-4 z-20">
-            <BasePopover @click.stop>
+            <BasePopover @click.prevent.stop>
               <template #content>
                 <button class="w-32 px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
                   @click="editJob(job.id)">
@@ -56,7 +56,7 @@
             </span>
           </div>
         </div>
-      </div>
+      </NuxtLink>
     </div>
 
     <p v-else class="text-center text-gray-500 text-lg mt-20">

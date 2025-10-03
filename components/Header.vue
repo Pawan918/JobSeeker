@@ -17,13 +17,13 @@
             <!-- Notifications Popover -->
             <BasePopover>
               <template #trigger>
-                <button class="relative p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 cursor-pointer">
-                  <BellIcon class="w-5 h-5 text-gray-600" />
+                <BaseButton variant="gray-light" rounded class="!p-3 relative" title="Notifications">
+                  <BellIcon class="w-5 h-5" />
                   <span v-if="unreadCount > 0"
                     class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
                     {{ unreadCount }}
                   </span>
-                </button>
+                </BaseButton>
               </template>
               <template #content>
                 <ClientOnly>
@@ -53,7 +53,7 @@
 
             <BasePopover>
               <template #trigger>
-                <BaseAvatar :name="user.name" />
+                <BaseAvatar :name="user.name" class="cursor-pointer"/>
               </template>
               <template #content>
                 <button class="w-32 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"

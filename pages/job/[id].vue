@@ -20,17 +20,14 @@
 
         <div class="flex flex-col items-start sm:items-end gap-2 shrink-0">
           <div class="flex items-center gap-2 shrink-0">
-            <button @click="toggleBookmark"
-              class="p-2 rounded-full hover:bg-blue-50 transition focus-visible:outline-2 focus-visible:outline-blue-500 cursor-pointer"
-              :title="bookmarked ? 'Remove bookmark' : 'Bookmark'">
+            <BaseButton @click="toggleBookmark" variant="ghost-light" size="sm" class="!p-2"
+              :title="bookmarked ? 'Remove bookmark' : 'Bookmark'" rounded>
               <component :is="bookmarked ? BookmarkSolid : BookmarkOutline" class="h-5 w-5 text-blue-600" />
-            </button>
-
-            <button @click="copyLink"
-              class="p-2 rounded-full hover:bg-gray-100 transition focus-visible:outline-2 focus-visible:outline-blue-500 cursor-pointer"
-              title="Copy job link">
-              <ClipboardDocumentIcon class="h-5 w-5 text-gray-500 hover:text-gray-700" />
-            </button>
+            </BaseButton>
+            <BaseButton @click="copyLink" variant="ghost-light" size="sm" class="!p-2 group" title="Copy job link"
+              rounded>
+              <ClipboardDocumentIcon class="h-5 w-5 text-gray-500 group-hover:text-blue-600" />
+            </BaseButton>
           </div>
         </div>
       </header>

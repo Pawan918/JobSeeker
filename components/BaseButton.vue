@@ -7,22 +7,26 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    variant?: 'primary' | 'secondary' | 'outline' | 'danger'
+    variant?: 'primary' | 'secondary' | 'gray-light' | 'outline' | 'danger' | 'ghost-light'
     size?: 'sm' | 'md' | 'lg'
     disabled?: boolean
+    rounded?: boolean
   }>(),
   {
     variant: 'primary',
     size: 'md',
-    disabled: false
+    disabled: false,
+    rounded: false
   }
 )
 
 const computedClass = computed<string>(() => {
-  const variants: Record<'primary' | 'secondary' | 'outline' | 'danger', string> = {
+  const variants: Record<'primary' | 'secondary' | 'gray-light' | 'outline' | 'danger' | 'ghost-light', string> = {
     primary: 'bg-blue-600 text-white hover:bg-blue-700',
     secondary: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
     outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50',
+    'ghost-light': 'hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-blue-500',
+    'gray-light': 'bg-gray-100 hover:bg-gray-200',
     danger: 'bg-red-600 text-white hover:bg-red-700'
   }
 
@@ -36,11 +40,12 @@ const computedClass = computed<string>(() => {
   const size = props.size as keyof typeof sizes
 
   return [
-    'inline-flex items-center justify-center rounded-lg font-medium transition',
+    'inline-flex items-center justify-center font-medium transition transition',
     props.disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500',
     variants[variant],
-    sizes[size]
+    sizes[size],
+    props.rounded ? 'rounded-full' : 'rounded-lg'
   ].join(' ')
 })
 

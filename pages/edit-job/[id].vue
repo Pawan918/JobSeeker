@@ -35,13 +35,22 @@
         </FormField>
 
         <div class="sm:col-span-2 flex justify-end pt-2">
-          <button type="submit" :disabled="loading"
-            class="bg-blue-600 hover:bg-blue-700 transition text-white font-medium px-6 py-2 rounded-lg disabled:opacity-50">
-            <span v-if="loading">Updating...</span>
-            <span v-else class="flex items-center gap-2">
-              <RocketLaunchIcon class="w-4 h-4" /> Update Job
-            </span>
-          </button>
+          <BaseButton variant="primary" size="md" :disabled="loading" type="submit">
+            <div class="flex items-center gap-2">
+              <div v-if="loading" class="flex items-center gap-2">
+                <ArrowPathIcon class="w-5 h-5 mr-2 animate-spin inline-block" />
+                <span>
+                  Updating...
+                </span>
+              </div>
+              <div v-else class="flex items-center gap-2">
+                <RocketLaunchIcon class="w-4 h-4" />
+                <span>
+                  Update Job
+                </span>
+              </div>
+            </div>
+          </BaseButton>
         </div>
       </form>
 
@@ -51,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { RocketLaunchIcon, PencilSquareIcon } from '@heroicons/vue/24/solid'
+import { RocketLaunchIcon, PencilSquareIcon, ArrowPathIcon } from '@heroicons/vue/24/solid'
 import { useRoute, useRouter } from 'vue-router'
 import FormField from '~/components/FormField.vue'
 
