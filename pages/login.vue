@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full bg-gray-100 flex items-center justify-center px-4">
+  <div class="h-full bg-gray-100 flex items-center justify-center px-4 bg-[url('/background.png')] bg-cover bg-center">
     <div class="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
-      <h2 class="text-3xl font-bold text-gray-900 text-center mb-6">Login</h2>
+      <h2 class="text-3xl font-bold text-gray-900 text-center mb-6">{{ $t('login') }}</h2>
       <form @submit.prevent="handleLogin" class="space-y-4">
         <div>
           <BaseInput v-model="form.email" type="email" required placeholder="Email address" autocomplete="username" />
@@ -30,7 +30,7 @@
 
       <p class="text-sm text-gray-600 mt-4 text-center">
         Don’t have an account?
-        <NuxtLink to="/register" class="text-blue-600 hover:underline">Sign up</NuxtLink>
+        <NuxtLink to="/register" class="text-blue-600 hover:underline">{{ $t('sign_up') }}</NuxtLink>
       </p>
       <p class="text-sm text-center">
         <NuxtLink to="/forgot-password" class="text-blue-600 hover:underline">Forgot password?</NuxtLink>
@@ -50,7 +50,9 @@ const isLoading = ref(false)
 const router = useRouter()
 const { setAuth } = useAuth()
 const toast = useNotification();
+const { locales, setLocale } = useI18n()
 
+const $t = useI18n().t
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),

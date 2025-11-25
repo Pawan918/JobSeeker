@@ -22,5 +22,12 @@ export default defineNuxtConfig({
       url: process.env.API_BASE_URL,
       default: true
     }]
+  },
+  i18n: {
+    defaultLocale: 'en',
+    locales: [
+      { code: 'en', name: 'English', file: 'en.json' },
+      { code: 'sp', name: 'Spanish', file: 'sp.json' }
+    ]
   }
 })

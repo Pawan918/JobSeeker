@@ -2,7 +2,7 @@
     <div class="flex justify-center gap-4 items-center mt-12">
         <BaseButton @click="$emit('update:page', page - 1)" :disabled="isPrevPage" variant="outline" size="sm">
             <ChevronLeftIcon class="h-4 w-4" />
-            <span class="ml-1">Prev</span>
+            <span class="ml-1">{{ $t('prev') }}</span>
         </BaseButton>
 
         <span class="text-sm text-gray-600">
@@ -10,7 +10,7 @@
         </span>
 
         <BaseButton @click="$emit('update:page', page + 1)" :disabled="isNextPage" variant="outline" size="sm">
-            <span class="mr-1">Next</span>
+            <span class="mr-1">{{ $t('next') }}</span>
             <ChevronRightIcon class="h-4 w-4" />
         </BaseButton>
     </div>
@@ -20,6 +20,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid'
 import BaseButton from './BaseButton.vue'
 
+const $t = useI18n().t
 const props = defineProps<{
     page: number
     totalPages: number

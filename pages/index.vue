@@ -12,7 +12,7 @@
                 </p>
             </div>
 
-            <NuxtLink to="/post" class="shrink">
+            <NuxtLink to="/post">
                 <BaseButton variant="primary" size="md" class="gap-2">
                     <PlusIcon class="h-5 w-5" />
                     Post&nbsp;Job

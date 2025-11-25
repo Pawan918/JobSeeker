@@ -11,7 +11,7 @@
         class="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition p-6 flex flex-col justify-between">
         <!-- Job Info -->
         <div>
-          <NuxtLink :to="`/jobs/${app.job.id}`" class="text-xl font-semibold text-blue-700 hover:underline">
+          <NuxtLink :to="`/job/${app.job.id}`" class="text-xl font-semibold text-blue-700 hover:underline">
             {{ app.job.title }}
           </NuxtLink>
           <p class="text-gray-600 text-sm mt-1">

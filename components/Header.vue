@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex h-16 items-center justify-between">
         <NuxtLink to="/" class="text-2xl font-bold text-blue-600 tracking-tight">
-          DevJobsHub
+          <img src="/jobhunt.png" alt="JobHunt Logo" class="h-16 w-auto inline-block mr-2" />
         </NuxtLink>
 
         <nav class="hidden md:flex items-center space-x-6 text-sm text-gray-700 font-medium">
@@ -13,15 +13,17 @@
           </NuxtLink>
         </nav>
         <div class="flex items-center space-x-4 text-sm">
+          <BaseSelect v-if="token" :options="languageOptions" v-model="language" class="!w-40"
+            @update:modelValue="(lang) => setLocale(lang)" />
           <template v-if="user">
             <!-- Notifications Popover -->
             <BasePopover>
               <template #trigger>
-                <BaseButton variant="gray-light" rounded class="!p-3 relative" title="Notifications">
+                <BaseButton variant="gray-light" rounded class="!p-3 relative" :title="$t('notifications')">
                   <BellIcon class="w-5 h-5" />
                   <span v-if="unreadCount > 0"
                     class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
-                    {{ unreadCount }}
+                    {{ unreadCount > 9 ? '9+' : unreadCount }}
                   </span>
                 </BaseButton>
               </template>
@@ -44,7 +46,7 @@
                     </div>
 
                     <div v-if="notifications.length === 0" class="p-2 text-sm text-gray-400">
-                      No notifications
+                      {{ $t('no_notifications') }}
                     </div>
                   </div>
                 </ClientOnly>
@@ -53,23 +55,23 @@
 
             <BasePopover>
               <template #trigger>
-                <BaseAvatar :name="user.name" class="cursor-pointer"/>
+                <BaseAvatar :name="user.name" class="cursor-pointer" />
               </template>
               <template #content>
                 <button class="w-32 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
                   @click="handleLogout">
                   <ArrowLeftStartOnRectangleIcon class="w-4 h-4" />
-                  Log out
+                  {{ $t('logout') }}
                 </button>
               </template>
             </BasePopover>
           </template>
 
           <template v-else>
-            <NuxtLink to="/login" class="text-blue-600 hover:underline">Login</NuxtLink>
-            <NuxtLink to="/register" class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition">
-              Sign Up
-            </NuxtLink>
+            <BaseButton to="/login" variant="outline" class="text-blue-600 hover:bg-blue-50">{{ $t('login') }}</BaseButton>
+            <BaseButton to="/register" variant="primary">
+              {{ $t('sign_up') }}
+            </BaseButton>
           </template>
         </div>
       </div>
@@ -84,24 +86,21 @@ import { ArrowLeftStartOnRectangleIcon, BellIcon } from '@heroicons/vue/24/solid
 import { useAuth } from '~/composables/useAuth'
 import { useRealtime } from '~/composables/useRealtime'
 import { formatDate } from '~/utils/index'
+const { locales, setLocale } = useI18n()
+const $t = useI18n().t
 
 
 const { user, logout, token } = useAuth()
 const { notifications, markAsRead } = useRealtime()
-const navigationRoutes = [
-  {
-    name: 'Home',
-    to: '/'
-  },
-  {
-    name: 'My Jobs',
-    to: '/my-jobs'
-  },
-  {
-    name: 'Applied Jobs',
-    to: '/application',
-  }
-]
+
+const navigationRoutes = computed(() => [
+  { name: $t('home'), to: '/' },
+  { name: $t('my_jobs'), to: '/my-jobs' },
+  { name: $t('applied_jobs'), to: '/application' }
+])
+
+const languageOptions = ref(locales.value.map(loc => ({ label: loc.name, value: loc.code })))
+const language = ref(useI18n().locale.value)
 
 const unreadCount = computed(() =>
   notifications.value.filter(n => !n.isRead).length

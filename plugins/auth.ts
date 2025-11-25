@@ -5,7 +5,7 @@ export default defineNuxtPlugin(async () => {
   await auth.initAuth()
   watch(
     () => auth.token.value,
-    (newToken, oldToken) => {
+    (newToken) => {
       if (newToken) {
         socketInitialization(newToken as string)
       } else {

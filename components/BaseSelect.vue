@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { useClickOutside } from '~/composables/useClickOutside'
-import { ref, computed, onMounted, onBeforeUnmount } from "vue"
+import { ref, computed } from "vue"
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/vue/24/solid"
 
 const props = defineProps({
