@@ -1,79 +1,132 @@
 <template>
   <div class="max-w-4xl mx-auto px-6 py-12">
+
     <NuxtLink to="/"
-      class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors mb-8">
-      <ArrowLongLeftIcon class="h-4 w-4" />
+      class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-all duration-200 hover:gap-2 mb-8 group">
+      <ArrowLongLeftIcon class="h-4 w-4 transform group-hover:-translate-x-0.5 transition-transform" />
       <span>Back to all jobs</span>
     </NuxtLink>
 
-    <section v-if="job" class="rounded-3xl border border-gray-200 shadow-sm bg-white/80 backdrop-blur-md">
-      <header class="p-8 sm:p-10 flex flex-col sm:flex-row justify-between gap-6">
-        <div class="flex-1">
-          <h1 class="text-3xl font-semibold text-gray-900 leading-tight">
-            {{ job.title }}
-          </h1>
-          <p class="mt-1 text-lg text-gray-700">{{ job.company }}</p>
-          <p class="mt-1 text-sm text-gray-500">
-            {{ job.location }} • {{ job.type.toUpperCase() }}
-          </p>
+    <section v-if="job"
+      class="rounded-3xl border border-gray-200 shadow-2xl shadow-gray-200/50 bg-white backdrop-blur-md overflow-hidden">
+
+      <header class="p-8 sm:p-10 flex flex-col md:flex-row justify-between gap-6 border-b border-gray-100">
+
+        <div class="flex items-start gap-4 flex-1">
+          <div class="h-14 w-14 rounded-xl bg-gray-50 border border-gray-100 p-0.5 shrink-0 overflow-hidden">
+            <img :src="getLogoUrl(job.company)" class="h-full w-full rounded-lg object-cover" alt="Company Logo" />
+          </div>
+
+          <div>
+            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight leading-snug">
+              {{ job.title }}
+            </h1>
+            <p class="mt-1 text-xl text-gray-700 font-medium">{{ job.company }}</p>
+          </div>
         </div>
 
-        <div class="flex flex-col items-start sm:items-end gap-2 shrink-0">
-          <div class="flex items-center gap-2 shrink-0">
-            <BaseButton @click="toggleBookmark" variant="ghost-light" size="sm" class="!p-2"
-              :title="bookmarked ? 'Remove bookmark' : 'Bookmark'" rounded>
-              <component :is="bookmarked ? BookmarkSolid : BookmarkOutline" class="h-5 w-5 text-blue-600" />
-            </BaseButton>
-            <BaseButton @click="copyLink" variant="ghost-light" size="sm" class="!p-2 group" title="Copy job link"
-              rounded>
-              <ClipboardDocumentIcon class="h-5 w-5 text-gray-500 group-hover:text-blue-600" />
-            </BaseButton>
-          </div>
+        <div class="flex items-center gap-3 shrink-0 pt-1">
+          <BaseButton @click="toggleBookmark" variant="ghost-light" size="sm" class="!p-2"
+            :title="bookmarked ? 'Remove bookmark' : 'Bookmark'" rounded>
+            <component :is="bookmarked ? BookmarkSolid : BookmarkOutline" class="h-5 w-5 text-blue-600" />
+          </BaseButton>
+          <BaseButton @click="copyLink" variant="ghost-light" size="sm" class="p-2! group" title="Copy job link"
+            rounded>
+            <ClipboardDocumentIcon class="h-5 w-5 text-gray-500 group-hover:text-blue-600" />
+          </BaseButton>
         </div>
       </header>
 
-      <div class="px-8 pb-8 sm:px-10 sm:pb-10 space-y-8">
-        <section>
-          <h2 class="text-lg font-medium text-gray-800 mb-2">Job Description</h2>
-          <p class="whitespace-pre-line leading-relaxed text-gray-700">
+      <section
+        class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm px-8 py-6 sm:px-10 sm:py-8 border-b border-gray-100">
+
+        <div>
+          <p class="text-gray-500 font-medium mb-1">Type</p>
+          <span :class="getJobTypeClass(job.type)"
+            class="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider border">
+            {{ job.type }}
+          </span>
+        </div>
+
+        <div>
+          <p class="text-gray-500 font-medium mb-1">Location</p>
+          <div class="flex items-center text-gray-800 font-semibold gap-1">
+            <MapPinIcon class="h-4 w-4 text-blue-500" />
+            {{ job.location }}
+          </div>
+        </div>
+
+        <div>
+          <p class="text-gray-500 font-medium mb-1">Posted</p>
+          <div class="flex items-center text-gray-800 font-semibold gap-1" :class="{ 'text-red-500': isOldJob }">
+            <ClockIcon class="h-4 w-4" />
+            {{ timeAgo(job.createdAt) }}
+          </div>
+          <p v-if="isOldJob" class="text-xs text-red-500 mt-0.5 flex items-center gap-0.5">
+            <ExclamationTriangleIcon class="h-3 w-3" /> This job is quite old.
+          </p>
+        </div>
+
+        <div>
+          <p class="text-gray-500 font-medium mb-1">Experience</p>
+          <div class="flex items-center text-gray-800 font-semibold gap-1">
+            <AcademicCapIcon class="h-4 w-4 text-blue-500" />
+            {{ job.experience || 'Mid-Level' }}
+          </div>
+        </div>
+
+      </section>
+
+      <div class="px-8 pb-8 sm:px-10 sm:pb-10 space-y-10">
+
+        <section class="pt-2">
+          <h2 class="text-xl font-bold text-gray-900 mb-3 border-l-4 border-blue-600 pl-3">Job Description</h2>
+          <p class="whitespace-pre-line leading-relaxed text-gray-700 prose max-w-none">
             {{ job.description }}
           </p>
         </section>
+
         <section v-if="job.tags?.length">
-          <h2 class="text-lg font-medium text-gray-800 mb-2">Tags</h2>
-          <ul class="flex flex-wrap gap-2">
+          <h2 class="text-xl font-bold text-gray-900 mb-3 border-l-4 border-blue-600 pl-3">Required Skills</h2>
+          <ul class="flex flex-wrap gap-3">
             <li v-for="tag in job.tags" :key="tag"
-              class="rounded-full bg-blue-100 text-blue-700 px-3 py-1 text-xs font-semibold tracking-tight">
+              class="rounded-full bg-blue-50 text-blue-800 px-3.5 py-1.5 text-sm font-semibold border border-blue-200">
               #{{ tag }}
             </li>
           </ul>
         </section>
-        <footer class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-gray-100">
-          <div class="text-sm text-gray-500 space-y-0.5 leading-snug">
+
+        <footer class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-6 border-t border-gray-100">
+          <div class="text-sm text-gray-600 space-y-1 leading-snug">
             <p>
               Posted by
-              <strong class="text-gray-700">{{ job.postedBy?.name || 'Anonymous' }}</strong>
+              <strong class="text-gray-900">{{ job.postedBy?.name || 'Anonymous' }}</strong>
             </p>
-            <p>Posted {{ timeAgo(job.createdAt) }}</p>
-            <p>Job&nbsp;ID&nbsp;#{{ job.id }}</p>
+            <p class="flex items-center gap-1.5">
+              <CalendarDaysIcon class="h-4 w-4 text-gray-400" />
+              <span>Posted {{ timeAgo(job.createdAt) }}</span>
+            </p>
+            <p class="text-xs text-gray-400">Job&nbsp;ID&nbsp;#{{ job.id }}</p>
           </div>
 
           <button v-if="!applied" @click="applyToJob" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white
-                   font-medium px-6 py-2 rounded-lg shadow-sm transition-colors
-                    focus-visible:outline-2 focus-visible:outline-blue-500">
+            font-bold px-8 py-3 rounded-xl shadow-lg shadow-blue-500/50 transition-all transform hover:scale-[1.02] active:scale-95
+             focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2">
             <RocketLaunchIcon class="h-5 w-5 -rotate-12" />
             Apply&nbsp;Now
           </button>
 
-          <p v-else class="inline-flex items-center gap-1 text-green-600 font-medium">
-            <CheckCircleIcon class="h-5 w-5" />
-            You&#160;have&#160;applied
+          <p v-else
+            class="inline-flex items-center gap-2 text-green-600 font-bold text-lg px-4 py-2 rounded-xl bg-green-50 border border-green-200">
+            <CheckCircleIcon class="h-6 w-6" />
+            You've applied!
           </p>
         </footer>
       </div>
     </section>
   </div>
 </template>
+
 <script setup lang="ts">
 import {
   ArrowLongLeftIcon,
@@ -81,6 +134,12 @@ import {
   ClipboardDocumentIcon,
   CheckCircleIcon,
   RocketLaunchIcon,
+  MapPinIcon,
+  BriefcaseIcon,
+  CalendarDaysIcon,
+  ClockIcon,
+  AcademicCapIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/vue/24/solid'
 import { BookmarkIcon as BookmarkOutline } from '@heroicons/vue/24/outline'
 import type { Job, Application } from '~/types/index'
@@ -92,6 +151,7 @@ const jobId = Number(route.params.id)
 
 const bookmarked = ref(false)
 const applied = ref(false)
+const isOldJob = ref(false)
 
 const { token, isAuthenticated } = useAuth()
 
@@ -100,6 +160,19 @@ const { data: job, error } = await useAsyncData<Job>(
   () => useApi<Job>(`/jobs/${jobId}`),
 )
 
+const getLogoUrl = (companyName: string) => {
+  return `https://ui-avatars.com/api/?name=${companyName}&background=random&color=fff&size=128&bold=true`
+}
+
+const getJobTypeClass = (type: string) => {
+  const typeMap: Record<string, string> = {
+    'full-time': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    'part-time': 'bg-amber-100 text-amber-800 border-amber-200',
+    'freelance': 'bg-indigo-100 text-indigo-800 border-indigo-200',
+  }
+  return typeMap[type.toLowerCase()] || 'bg-gray-100 text-gray-600'
+}
+
 const copyLink = () => {
   if (process.client) {
     navigator.clipboard.writeText(window.location.href).then(() => {
@@ -107,7 +180,6 @@ const copyLink = () => {
     })
   }
 }
-
 
 const applyToJob = async () => {
   if (!isAuthenticated.value) {

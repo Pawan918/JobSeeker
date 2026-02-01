@@ -13,10 +13,9 @@
           </NuxtLink>
         </nav>
         <div class="flex items-center space-x-4 text-sm">
-          <BaseSelect v-if="token" :options="languageOptions" v-model="language" class="!w-40"
+          <BaseSelect v-if="token" :options="languageOptions" v-model="language" class="w-40!"
             @update:modelValue="(lang) => setLocale(lang)" />
           <template v-if="user">
-            <!-- Notifications Popover -->
             <BasePopover>
               <template #trigger>
                 <BaseButton variant="gray-light" rounded class="!p-3 relative" :title="$t('notifications')">
@@ -68,8 +67,9 @@
           </template>
 
           <template v-else>
-            <BaseButton to="/login" variant="outline" class="text-blue-600 hover:bg-blue-50">{{ $t('login') }}</BaseButton>
-            <BaseButton to="/register" variant="primary">
+            <BaseButton @click="router.push('/login')" variant="outline" class="text-blue-600 hover:bg-blue-50">{{
+              $t('login') }}</BaseButton>
+            <BaseButton @click="router.push('/register')" variant="primary">
               {{ $t('sign_up') }}
             </BaseButton>
           </template>
@@ -83,13 +83,14 @@
 import type { Notification } from '~/types/notification'
 
 import { ArrowLeftStartOnRectangleIcon, BellIcon } from '@heroicons/vue/24/solid'
+import { useRouter } from 'vue-router'
 import { useAuth } from '~/composables/useAuth'
 import { useRealtime } from '~/composables/useRealtime'
 import { formatDate } from '~/utils/index'
 const { locales, setLocale } = useI18n()
 const $t = useI18n().t
 
-
+const router = useRouter();
 const { user, logout, token } = useAuth()
 const { notifications, markAsRead } = useRealtime()
 
