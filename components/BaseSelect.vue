@@ -1,28 +1,28 @@
 <template>
     <div class="relative w-64" ref="dropdownRef">
         <!-- Label -->
-        <label v-if="label" class="text-sm font-medium text-gray-700 mb-1 block">
+        <label v-if="label" class="text-sm font-medium text-gray-700 mb-1 block dark:text-zinc-200">
             {{ label }}
         </label>
 
         <!-- Trigger button -->
         <button type="button"
-            class="w-full px-4 py-2.5 rounded-lg text-sm border border-gray-300 shadow-sm flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 cursor-pointer"
+            class="w-full px-4 py-2.5 rounded-lg text-sm border border-gray-300 shadow-sm flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 cursor-pointer bg-white text-gray-900 dark:bg-zinc-900 dark:text-zinc-100 dark:border-zinc-700 dark:focus:ring-cyan-900/40 dark:focus:border-cyan-400"
             @click="toggleDropdown">
             <span class="truncate">
                 {{ selectedOption?.label || placeholder }}
             </span>
             <component :is="isOpen ? ChevronUpIcon : ChevronDownIcon"
-                class="w-5 h-5 text-gray-500 transition-transform duration-200" />
+                class="w-5 h-5 text-gray-500 transition-transform duration-200 dark:text-zinc-400" />
         </button>
 
 
         <transition name="fade">
             <ul v-if="isOpen"
-                class="absolute mt-1 w-full bg-white rounded-lg shadow-lg border border-gray-200 z-10 max-h-60 overflow-auto">
+                class="absolute mt-1 w-full bg-white rounded-lg shadow-lg border border-gray-200 z-10 max-h-60 overflow-auto dark:bg-zinc-900 dark:border-zinc-700">
                 <li v-for="(option, index) in options" :key="index" @click="selectOption(option)"
-                    class="px-4 py-2 text-sm cursor-pointer hover:bg-blue-50"
-                    :class="{ 'bg-blue-100 font-medium': option.value === modelValue }">
+                    class="px-4 py-2 text-sm cursor-pointer hover:bg-blue-50 dark:hover:bg-zinc-800"
+                    :class="{ 'bg-blue-100 font-medium dark:bg-cyan-900/40 dark:text-zinc-100': option.value === modelValue }">
                     {{ option.label }}
                 </li>
             </ul>

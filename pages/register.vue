@@ -1,16 +1,16 @@
 <template>
-  <div class="h-full bg-gray-100 flex items-center justify-center px-4 bg-[url('/background.png')] bg-cover bg-center">
-    <div class="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
-      <h2 class="text-3xl font-bold text-gray-900 text-center mb-6">Create Account</h2>
+  <div class="h-full bg-gray-100 flex items-center justify-center px-4 bg-[url('/background.png')] bg-cover bg-center dark:bg-zinc-950">
+    <div class="w-full max-w-md bg-white rounded-2xl p-8 shadow-xl dark:bg-zinc-900 dark:border dark:border-zinc-800">
+      <h2 class="text-3xl font-bold text-gray-900 text-center mb-6 dark:text-zinc-100">Create Account</h2>
       <form @submit.prevent="handleRegister" class="space-y-4">
         <div>
           <BaseInput v-model="form.name" type="text" name="name" autocomplete="name" required placeholder="Full Name" />
-          <p v-if="errors.name" class="text-sm text-red-500">{{ errors.name }}</p>
+          <p v-if="errors.name" class="text-sm text-red-500 dark:text-red-400">{{ errors.name }}</p>
         </div>
         <div>
           <BaseInput v-model="form.email" type="email" name="email" autocomplete="email" required
             placeholder="Email address" />
-          <p v-if="errors.email" class="text-sm text-red-500">{{ errors.email }}</p>
+          <p v-if="errors.email" class="text-sm text-red-500 dark:text-red-400">{{ errors.email }}</p>
         </div>
         <div>
           <BaseInput v-model="form.password" :type="showPassword ? 'text' : 'password'" name="password"
@@ -22,7 +22,7 @@
               </div>
             </template>
           </BaseInput>
-          <p v-if="errors.password" class="text-sm text-red-500">{{ errors.password }}</p>
+          <p v-if="errors.password" class="text-sm text-red-500 dark:text-red-400">{{ errors.password }}</p>
         </div>
         <BaseButton type="submit" class="w-full py-3 font-semibold text-lg" :disabled="isSignUpBtnDisabled"
           variant="primary">
@@ -30,9 +30,9 @@
           <span> Sign Up </span>
         </BaseButton>
       </form>
-      <p class="text-sm text-gray-600 mt-4 text-center">
+      <p class="text-sm text-gray-600 mt-4 text-center dark:text-zinc-300">
         Already have an account?
-        <NuxtLink to="/login" class="text-blue-600 hover:underline">Login</NuxtLink>
+        <NuxtLink to="/login" class="text-blue-600 hover:underline dark:text-cyan-300">Login</NuxtLink>
       </p>
     </div>
   </div>

@@ -3,11 +3,11 @@
         <!-- ── header ── -->
         <header class="mb-10 flex flex-col sm:flex-row justify-between gap-6">
             <div>
-                <h1 class="text-4xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
+                <h1 class="text-4xl font-bold text-gray-900 tracking-tight flex items-center gap-2 dark:text-zinc-100">
                     <RocketLaunchIcon class="h-7 w-7 text-blue-600" />
                     Explore Developer Jobs
                 </h1>
-                <p class="mt-2 text-lg text-gray-500">
+                <p class="mt-2 text-lg text-gray-500 dark:text-zinc-400">
                     Browse top tech opportunities, updated in real&nbsp;time.
                 </p>
             </div>
@@ -20,7 +20,7 @@
             </NuxtLink>
         </header>
 
-        <section class="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 py-6 mb-12">
+        <section class="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 py-6 mb-12 dark:bg-zinc-900 dark:border-zinc-800">
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 items-end">
                 <BaseInput v-model="filters.search" label="Search" placeholder="Search by title, company, or keyword">
                     <template #iconLeft>
@@ -43,20 +43,20 @@
 
         <section class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <NuxtLink v-for="job in jobs" :key="job.id" :to="`/job/${job.id}`"
-                class="group relative bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-500 transition focus-visible:outline-2 focus-visible:outline-blue-500">
+                class="group relative bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-500 transition focus-visible:outline-2 focus-visible:outline-blue-500 dark:bg-zinc-900 dark:border-zinc-800">
                 <div class="p-6 flex flex-col h-full">
                     <div class="flex justify-between items-start mb-3">
                         <div class="flex gap-2">
                             <img :src="`https://ui-avatars.com/api/?name=${job.company}&background=random&color=fff&size=128`"
                                 :alt="job.company"
-                                class="h-12 w-12 rounded-lg object-cover shadow-sm border border-gray-100" />
+                                class="h-12 w-12 rounded-lg object-cover shadow-sm border border-gray-100 dark:border-zinc-800" />
                             <div>
-                                <h2 class="text-lg font-semibold text-blue-700 leading-snug group-hover:underline">
+                                <h2 class="text-lg font-semibold text-blue-700 leading-snug group-hover:underline dark:text-cyan-300">
                                     {{ job.title }}
                                 </h2>
-                                <div class="text-sm text-gray-800 font-medium gap-4 flex items-center">
+                                <div class="text-sm text-gray-800 font-medium gap-4 flex items-center dark:text-zinc-200">
                                     {{ job.company }}
-                                    <span class="text-gray-400 font-normal flex items-center gap-0.5">
+                                    <span class="text-gray-400 font-normal flex items-center gap-0.5 dark:text-zinc-500">
                                         <MapPinIcon class="inline h-4 w-4" />
                                         {{ job.location }}
                                     </span>
@@ -68,11 +68,11 @@
                             :title="bookmarkedJobs.includes(job.id) ? 'Remove bookmark' : 'Bookmark'"
                             variant="ghost-light" size="sm" class="!p-1.5" rounded>
                             <component :is="bookmarkedJobs.includes(job.id) ? BookmarkSolid : BookmarkOutline"
-                                class="h-5 w-5 text-blue-600 cursor-pointer" />
+                                class="h-5 w-5 text-blue-600 cursor-pointer dark:text-cyan-300" />
                         </BaseButton>
                     </div>
 
-                    <p class="text-sm text-gray-700 line-clamp-3 mt-2">
+                    <p class="text-sm text-gray-700 line-clamp-3 mt-2 dark:text-zinc-300">
                         {{ job.description }}
                     </p>
 
@@ -82,22 +82,22 @@
                             {{ job.type.toUpperCase().replace('-', ' ') }}
                         </span>
                         <span v-for="tag in job.tags" :key="tag"
-                            class="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full">
+                            class="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full dark:bg-zinc-800 dark:text-zinc-200">
                             #{{ tag }}
                         </span>
                     </div>
 
                     <div class="mt-auto pt-4 flex justify-between items-center">
-                        <p class="text-xs text-gray-400 flex items-center">
-                            <ClockIcon class="inline h-3.5 w-3.5 mr-0.5 text-blue-700" />
+                        <p class="text-xs text-gray-400 flex items-center dark:text-zinc-500">
+                            <ClockIcon class="inline h-3.5 w-3.5 mr-0.5 text-blue-700 dark:text-cyan-400" />
                             Posted {{ timeAgo(job.createdAt) }}
                         </p>
                         <span v-if="appliedJobIds.includes(job.id)"
-                            class="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 bg-green-50 text-green-700 rounded-full border border-green-100">
+                            class="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 bg-green-50 text-green-700 rounded-full border border-green-100 dark:bg-green-900/30 dark:text-green-200 dark:border-green-800">
                             <CheckCircleIcon class="h-4 w-4" />
                             Applied
                         </span>
-                        <NuxtLink v-else :to="`/job/${job.id}`" class="text-sm flex items-center gap-1 text-blue-600 hover:underline">
+                        <NuxtLink v-else :to="`/job/${job.id}`" class="text-sm flex items-center gap-1 text-blue-600 hover:underline dark:text-cyan-300">
                             Apply Now 
                             <ArrowRightIcon class="inline h-4 w-4 ml-0.5" />
                         </NuxtLink>
@@ -216,12 +216,12 @@ const toggleBookmark = async (jobId: number) => {
 }
 const getBadgeClass = (type: string) => {
     const classes: Record<string, string> = {
-        'full-time': 'bg-green-100 text-green-700 border border-green-200',
-        'part-time': 'bg-orange-100 text-orange-700 border border-orange-200',
-        'freelance': 'bg-purple-100 text-purple-700 border border-purple-200'
+        'full-time': 'bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-200 dark:border-green-800',
+        'part-time': 'bg-orange-100 text-orange-700 border border-orange-200 dark:bg-orange-900/30 dark:text-orange-200 dark:border-orange-800',
+        'freelance': 'bg-purple-100 text-purple-700 border border-purple-200 dark:bg-purple-900/30 dark:text-purple-200 dark:border-purple-800'
     }
     const key = type?.toLowerCase() || ''
-    return classes[key] || 'bg-gray-100 text-gray-700'
+    return classes[key] || 'bg-gray-100 text-gray-700 dark:bg-zinc-800 dark:text-zinc-200'
 }
 
 const jobs = computed(() => jobData.value?.jobs ?? [])

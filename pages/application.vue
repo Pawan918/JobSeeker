@@ -1,47 +1,47 @@
 <template>
   <div class="max-w-6xl mx-auto px-6 py-12">
     <!-- Header -->
-    <h1 class="text-3xl font-bold text-gray-900 mb-10 flex items-center gap-3">
+    <h1 class="text-3xl font-bold text-gray-900 mb-10 flex items-center gap-3 dark:text-zinc-100">
       <NewspaperIcon class="w-10 h-10 text-blue-600" /> My Job Applications
     </h1>
 
     <!-- Applications Grid -->
     <div v-if="applications.length" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <div v-for="app in applications" :key="app.id"
-        class="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition p-6 flex flex-col justify-between">
+        class="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition p-6 flex flex-col justify-between dark:bg-zinc-900 dark:border-zinc-800">
         <!-- Job Info -->
         <div>
-          <NuxtLink :to="`/job/${app.job.id}`" class="text-xl font-semibold text-blue-700 hover:underline">
+          <NuxtLink :to="`/job/${app.job.id}`" class="text-xl font-semibold text-blue-700 hover:underline dark:text-cyan-300">
             {{ app.job.title }}
           </NuxtLink>
-          <p class="text-gray-600 text-sm mt-1">
+          <p class="text-gray-600 text-sm mt-1 dark:text-zinc-300">
             {{ app.job.company }} · {{ app.job.location }}
           </p>
-          <p class="text-gray-500 text-sm mb-4">{{ app.job.type.toUpperCase() }}</p>
+          <p class="text-gray-500 text-sm mb-4 dark:text-zinc-400">{{ app.job.type.toUpperCase() }}</p>
 
-          <p class="text-gray-700 text-sm line-clamp-3 mb-4">
+          <p class="text-gray-700 text-sm line-clamp-3 mb-4 dark:text-zinc-200">
             {{ app.job.description }}
           </p>
 
           <div class="flex flex-wrap gap-2 mb-4">
             <span v-for="tag in app.job.tags" :key="tag"
-              class="text-xs bg-blue-50 text-blue-700 font-medium px-2 py-0.5 rounded-full">
+              class="text-xs bg-blue-50 text-blue-700 font-medium px-2 py-0.5 rounded-full dark:bg-cyan-900/30 dark:text-cyan-300">
               #{{ tag }}
             </span>
           </div>
         </div>
 
         <!-- Footer: Status + Dates -->
-        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
           <span class="inline-block text-xs font-semibold px-2 py-1 rounded-full border" :class="{
-            'bg-yellow-50 text-yellow-700 border-yellow-200': app.status === 'PENDING',
-            'bg-green-50 text-green-700 border-green-200': app.status === 'ACCEPTED',
-            'bg-red-50 text-red-700 border-red-200': app.status === 'REJECTED'
+            'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-800': app.status === 'PENDING',
+            'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-200 dark:border-green-800': app.status === 'ACCEPTED',
+            'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-200 dark:border-red-800': app.status === 'REJECTED'
           }">
             {{ app.status }}
           </span>
 
-          <div class="text-right text-xs text-gray-500">
+          <div class="text-right text-xs text-gray-500 dark:text-zinc-400">
             <p>
               Applied on:
               <span class="font-medium">{{ formatDate(app.createdAt) }}</span>
@@ -53,7 +53,7 @@
     </div>
 
     <!-- Empty State -->
-    <p v-else class="text-center text-gray-500 mt-20 text-lg">
+    <p v-else class="text-center text-gray-500 mt-20 text-lg dark:text-zinc-400">
       You haven’t applied to any jobs yet. 📭
     </p>
   </div>

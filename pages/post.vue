@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-4xl mx-auto px-6 py-12">
-        <div class="bg-white shadow-md border border-gray-200 rounded-2xl p-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-2">
+        <div class="bg-white shadow-md border border-gray-200 rounded-2xl p-8 dark:bg-zinc-900 dark:border-zinc-800">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-2 dark:text-zinc-100">
                 <MegaphoneIcon class="h-7 w-7 text-blue-600" />
                 Post a New Job Opening
             </h1>
@@ -40,8 +40,8 @@
                 <FormField label="Description" class="sm:col-span-2">
                     <textarea v-model="form.description" rows="5"
                         placeholder="Write a short description about the job..."
-                        class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
-                    <p v-if="errors.description" class="text-red-600 text-xs mt-1">{{ errors.description }}</p>
+                        class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-zinc-900 dark:text-zinc-100 dark:border-zinc-700 dark:placeholder-zinc-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-900/40" />
+                    <p v-if="errors.description" class="text-red-600 text-xs mt-1 dark:text-red-400">{{ errors.description }}</p>
                 </FormField>
 
                 <div class="sm:col-span-2 flex justify-end pt-2">
@@ -55,7 +55,7 @@
                 </div>
             </form>
 
-            <p v-if="successMessage" class="text-green-600 text-sm mt-6">{{ successMessage }}</p>
+            <p v-if="successMessage" class="text-green-600 text-sm mt-6 dark:text-green-400">{{ successMessage }}</p>
         </div>
     </div>
 </template>

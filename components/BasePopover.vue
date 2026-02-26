@@ -10,7 +10,7 @@
 
         <transition name="fade">
             <div v-if="isOpen" ref="contentRef" :class="[
-                'absolute z-30 min-w-[8rem] bg-white border border-gray-200 rounded-md shadow-lg',
+                'absolute z-30 min-w-[8rem] bg-white border border-gray-200 rounded-md shadow-lg dark:bg-zinc-900 dark:border-zinc-700',
                 positionClass
             ]">
                 <slot name="content" />

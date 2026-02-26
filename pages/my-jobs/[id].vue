@@ -2,25 +2,25 @@
     <div class="max-w-7xl mx-auto px-6 py-12">
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
-            <router-link to="/my-jobs" class="text-blue-600 hover:underline font-medium">
+            <router-link to="/my-jobs" class="text-blue-600 hover:underline font-medium dark:text-cyan-300">
                 ← Back to My Jobs
             </router-link>
-            <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <UsersIcon class="w-9 h-9 text-blue-600" /> Applicants
+            <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3 dark:text-zinc-100">
+                <UsersIcon class="w-9 h-9 text-blue-600 dark:text-cyan-400" /> Applicants
             </h1>
         </div>
 
         <!-- Job Summary -->
-        <div v-if="job" class="mb-10 border-b border-gray-200 pb-6">
-            <h1 class="text-4xl font-extrabold text-gray-900">{{ job.title }}</h1>
-            <div class="mt-2 flex items-center gap-3 text-gray-600 text-lg">
+        <div v-if="job" class="mb-10 border-b border-gray-200 pb-6 dark:border-zinc-800">
+            <h1 class="text-4xl font-extrabold text-gray-900 dark:text-zinc-100">{{ job.title }}</h1>
+            <div class="mt-2 flex items-center gap-3 text-gray-600 text-lg dark:text-zinc-300">
                 <span class="font-medium">{{ job.company }}</span>
                 <span>•</span>
                 <span>{{ job.type }}</span>
                 <span>•</span>
                 <span>{{ job.location }}</span>
             </div>
-            <p class="mt-1 text-sm text-gray-500">
+            <p class="mt-1 text-sm text-gray-500 dark:text-zinc-400">
                 Posted on {{ new Date(job.createdAt).toLocaleDateString() }}
             </p>
         </div>
@@ -28,26 +28,26 @@
         <!-- Applicants Grid -->
         <div v-if="applications.length" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div v-for="app in applications" :key="app.id"
-                class="bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-lg transition p-6 flex flex-col justify-between">
+                class="bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-lg transition p-6 flex flex-col justify-between dark:bg-zinc-900 dark:border-zinc-800">
                 <!-- Applicant Info -->
                 <div class="flex items-start gap-4">
                     <!-- Avatar placeholder -->
                     <div
-                        class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-lg">
+                        class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-lg dark:bg-cyan-900/30 dark:text-cyan-200">
                         {{ app.user.name.charAt(0) }}
                     </div>
                     <div>
-                        <h2 class="text-lg font-semibold text-gray-900">{{ app.user.name }}</h2>
-                        <p class="text-sm text-gray-600">{{ app.user.email }}</p>
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-zinc-100">{{ app.user.name }}</h2>
+                        <p class="text-sm text-gray-600 dark:text-zinc-300">{{ app.user.email }}</p>
                         <a v-if="app.user.resumeUrl" :href="app.user.resumeUrl" target="_blank"
-                            class="text-sm text-blue-600 hover:underline font-medium">
+                            class="text-sm text-blue-600 hover:underline font-medium dark:text-cyan-300">
                             📄 View Resume
                         </a>
                     </div>
                 </div>
 
                 <!-- Cover Letter -->
-                <p class="text-sm text-gray-700 mt-3 line-clamp-3">
+                <p class="text-sm text-gray-700 mt-3 line-clamp-3 dark:text-zinc-300">
                     {{ app.coverLetter || 'No cover letter provided.' }}
                 </p>
 
@@ -56,9 +56,9 @@
                     <span
                         class="inline-block text-xs font-semibold px-3 py-1 rounded-full border uppercase tracking-wide"
                         :class="{
-                            'bg-yellow-50 text-yellow-700 border-yellow-200': app.status === 'PENDING',
-                            'bg-green-50 text-green-700 border-green-200': app.status === 'ACCEPTED',
-                            'bg-red-50 text-red-700 border-red-200': app.status === 'REJECTED'
+                            'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-800': app.status === 'PENDING',
+                            'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-200 dark:border-green-800': app.status === 'ACCEPTED',
+                            'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-200 dark:border-red-800': app.status === 'REJECTED'
                         }">
                         {{ app.status }}
                     </span>
@@ -74,7 +74,7 @@
                 </div>
 
                 <!-- Applied Time -->
-                <p class="text-xs text-gray-500 mt-3">
+                <p class="text-xs text-gray-500 mt-3 dark:text-zinc-400">
                     Applied {{ new Date(app.createdAt).toLocaleDateString() }}
                 </p>
             </div>
@@ -82,9 +82,9 @@
 
         <!-- Empty State -->
         <div v-else class="text-center mt-20">
-            <UsersIcon class="mx-auto w-12 h-12 text-gray-400" />
-            <p class="text-gray-500 text-lg mt-3">No applications yet for this job. 📭</p>
-            <router-link to="/jobs" class="inline-block mt-4 text-blue-600 hover:underline font-medium">
+            <UsersIcon class="mx-auto w-12 h-12 text-gray-400 dark:text-zinc-600" />
+            <p class="text-gray-500 text-lg mt-3 dark:text-zinc-400">No applications yet for this job. 📭</p>
+            <router-link to="/jobs" class="inline-block mt-4 text-blue-600 hover:underline font-medium dark:text-cyan-300">
                 Browse more jobs
             </router-link>
         </div>

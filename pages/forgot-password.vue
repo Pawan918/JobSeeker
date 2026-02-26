@@ -1,12 +1,12 @@
 <template>
-  <div class="h-full bg-gray-100 flex items-center justify-center px-4">
+  <div class="h-full bg-gray-100 flex items-center justify-center px-4 dark:bg-zinc-950">
     <div class="max-w-md mx-auto px-6 py-12">
-      <div class="bg-white shadow-lg border border-gray-200 rounded-2xl p-8 w-100">
-        <h1 class="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+      <div class="bg-white shadow-lg border border-gray-200 rounded-2xl p-8 w-100 dark:bg-zinc-900 dark:border-zinc-800">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2 dark:text-zinc-100">
           <EnvelopeIcon class="h-6 w-6 text-blue-600" />
           Forgot Password
         </h1>
-        <p class="text-sm text-gray-600 mb-8 leading-relaxed">
+        <p class="text-sm text-gray-600 mb-8 leading-relaxed dark:text-zinc-300">
           Enter your registered email address. We'll send you a secure link to reset your password.
         </p>
 
@@ -18,7 +18,7 @@
                 <AtSymbolIcon class="w-5 h-5 text-blue-500" />
               </template>
             </BaseInput>
-            <p v-if="errors.email" class="text-xs text-red-600 mt-1 ml-1">{{ errors.email }}</p>
+            <p v-if="errors.email" class="text-xs text-red-600 mt-1 ml-1 dark:text-red-400">{{ errors.email }}</p>
           </div>
 
           <BaseButton type="submit" class="w-full" :disabled="loading">

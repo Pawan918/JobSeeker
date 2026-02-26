@@ -1,12 +1,12 @@
 <template>
     <div class="max-w-md mx-auto px-6 py-12">
-        <div class="bg-white shadow-md border border-gray-200 rounded-2xl p-8">
-            <h1 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        <div class="bg-white shadow-md border border-gray-200 rounded-2xl p-8 dark:bg-zinc-900 dark:border-zinc-800">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2 dark:text-zinc-100">
                 <LockClosedIcon class="h-6 w-6 text-blue-600" />
                 Reset Password
             </h1>
 
-            <p class="text-sm text-gray-600 mb-6">
+            <p class="text-sm text-gray-600 mb-6 dark:text-zinc-300">
                 Enter your new password to reset your account access.
             </p>
 
@@ -16,7 +16,7 @@
                     <template #iconLeft>
                         <KeyIcon class="w-5 h-5 text-blue-500" />
                     </template>
-                    <p v-if="errors.password" class="text-sm text-red-500">{{ errors.password }}</p>
+                    <p v-if="errors.password" class="text-sm text-red-500 dark:text-red-400">{{ errors.password }}</p>
                 </BaseInput>
 
                 <BaseButton type="submit" class="w-full" :disabled="loading">

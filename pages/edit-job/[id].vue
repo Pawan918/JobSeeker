@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-4xl mx-auto px-6 py-12">
-    <div class="bg-white shadow-md border border-gray-200 rounded-2xl p-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+    <div class="bg-white shadow-md border border-gray-200 rounded-2xl p-8 dark:bg-zinc-900 dark:border-zinc-800">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3 dark:text-zinc-100">
         <PencilSquareIcon class="w-10 h-10" /> Edit Job
       </h1>
 
@@ -54,7 +54,7 @@
         </div>
       </form>
 
-      <p v-if="successMessage" class="text-green-600 text-sm mt-6">{{ successMessage }}</p>
+      <p v-if="successMessage" class="text-green-600 text-sm mt-6 dark:text-green-400">{{ successMessage }}</p>
     </div>
   </div>
 </template>
@@ -150,9 +150,20 @@ onMounted(fetchJob)
   transition: border-color 0.2s ease;
 }
 
+.dark .form-input {
+  border-color: #3f3f46;
+  background-color: #18181b;
+  color: #f4f4f5;
+}
+
 .form-input:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.dark .form-input:focus {
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.25);
 }
 </style>

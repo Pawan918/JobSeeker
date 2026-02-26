@@ -5,7 +5,7 @@
             <span class="ml-1">{{ $t('prev') }}</span>
         </BaseButton>
 
-        <span class="text-sm text-gray-600">
+        <span class="text-sm text-gray-600 dark:text-zinc-300">
             Page {{ page }} of {{ totalPages }}
         </span>
 

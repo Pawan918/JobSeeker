@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
 .toast-success {
   background-color: #22c55e !important; /* green */
   color: #fff;
